@@ -1,0 +1,45 @@
+-- Format columns for display
+Set linesize 200;
+set pagesize 50;
+-- Member Table
+COLUMN MemberID             FORMAT A10
+COLUMN Name                 FORMAT A20
+COLUMN Email                FORMAT A30
+COLUMN PhoneNumber          FORMAT A15
+COLUMN MembershipStartDate  FORMAT A12
+COLUMN MembershipExpiryDate FORMAT A12
+COLUMN Status               FORMAT A10
+COLUMN NoShowCount          FORMAT 999
+COLUMN ReservationBanUntil FORMAT A12
+
+-- Book Table
+COLUMN ISBN                 FORMAT A15
+COLUMN Title                FORMAT A30
+COLUMN Author               FORMAT A20
+COLUMN PublicationYear      FORMAT 9999
+COLUMN Price                FORMAT 9990.99
+COLUMN Description          FORMAT A50
+COLUMN Language             FORMAT A12
+
+-- Genre Table
+COLUMN GenreID              FORMAT A10
+COLUMN Description          FORMAT A50
+COLUMN GenreName            FORMAT A20
+
+-- BookGenre Table
+COLUMN ISBN                 FORMAT A15
+COLUMN GenreID              FORMAT A10
+
+-- BookCopy Table
+COLUMN BookCopyID           FORMAT A10
+COLUMN ISBN                 FORMAT A15
+COLUMN ShelfLocation        FORMAT A20
+COLUMN IsAvailable          FORMAT A3
+COLUMN Condition            FORMAT A10
+COLUMN AcquiredDate         FORMAT A12
+
+-- Reservation Table
+COLUMN MemberID             FORMAT A10
+COLUMN ISBN                 FORMAT A15
+COLUMN ReservationDate      FORMAT A12
+COLUMN Status               FORMAT A15
