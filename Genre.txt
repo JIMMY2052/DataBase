@@ -1,0 +1,22 @@
+drop table Genre;
+CREATE TABLE Genre (
+    GenreID            VARCHAR2(10) PRIMARY KEY,
+    Description        VARCHAR2(100),
+    GenreName          VARCHAR2(50)
+);
+
+
+
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G001', 'Fictional books including novels and short stories', 'Fiction');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G002', 'Books based on real events or biographies', 'Non-Fiction');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G003', 'Books that involve solving a crime or uncovering secrets', 'Mystery');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G004', 'Books that explore futuristic concepts and technology', 'Science Fiction');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G005', 'Books with magical elements or imaginary worlds', 'Fantasy');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G006', 'Books that provide information on various subjects', 'Educational');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G007', 'Books based on real-life incidents or history', 'Historical');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G008', 'Books that explore romantic relationships', 'Romance');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G009', 'Books for children and young readers', 'Children');
+INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G010', 'Books that focus on self-help and motivation', 'Self-Help');
+
+select count(*) as "No of Genre"
+from Genre;

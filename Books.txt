@@ -1,0 +1,65 @@
+drop table book;
+CREATE TABLE Book (
+    ISBN               VARCHAR(15) PRIMARY KEY,
+    Title              VARCHAR(50) NOT NULL,
+    Author             VARCHAR(50),
+    PublicationYear    NUMBER(4),
+    Price              NUMBER(6,2),
+    Description        VARCHAR(500),
+    Language           VARCHAR(30)
+);
+
+
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978918486085683', 'Mobile App Dev 5', 'John Smith', 2007, 45.56, 'This is a book about mobile app dev 5.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978653049967802', 'Python Essentials 4', 'John Smith', 2013, 44.41, 'This is a book about python essentials 4.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978160167712882', 'Python Essentials 5', 'Emily Chan', 2010, 112.81, 'This is a book about python essentials 5.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978118598993540', 'Cloud Computing 3', 'Jane Doe', 2002, 27.84, 'This is a book about cloud computing 3.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978413383564627', 'Python Essentials 3', 'Michael Lee', 2004, 34.39, 'This is a book about python essentials 3.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978582818734182', 'Software Engineering 4', 'Michael Lee', 2002, 109.47, 'This is a book about software engineering 4.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978399319494707', 'Software Engineering 1', 'Michael Lee', 2024, 31.48, 'This is a book about software engineering 1.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978647894640884', 'Operating Systems 2', 'Jane Doe', 2011, 138.39, 'This is a book about operating systems 2.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978967503790845', 'Cloud Computing 2', 'Alice Tan', 2001, 37.05, 'This is a book about cloud computing 2.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978196740169139', 'Cybersecurity 101 4', 'John Smith', 2018, 65.19, 'This is a book about cybersecurity 101 4.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978110985905744', 'Cybersecurity 101 2', 'Alice Tan', 2020, 77.73, 'This is a book about cybersecurity 101 2.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978414191980380', 'Database Design 1', 'Jane Doe', 2021, 42.57, 'This is a book about database design 1.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978108081334896', 'AI Basics 5', 'Michael Lee', 2009, 22.88, 'This is a book about ai basics 5.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978240461922119', 'Python Essentials 5', 'Michael Lee', 2015, 97.96, 'This is a book about python essentials 5.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978669394297950', 'Operating Systems 2', 'Alice Tan', 2015, 142.3, 'This is a book about operating systems 2.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978860405874562', 'Mobile App Dev 1', 'Jane Doe', 2021, 118.32, 'This is a book about mobile app dev 1.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978187478216498', 'AI Basics 2', 'Emily Chan', 2003, 147.84, 'This is a book about ai basics 2.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978431022003932', 'AI Basics 2', 'Michael Lee', 2019, 130.56, 'This is a book about ai basics 2.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978389148186586', 'Operating Systems 5', 'Jane Doe', 2009, 136.56, 'This is a book about operating systems 5.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978834650104565', 'Cybersecurity 101 5', 'Michael Lee', 2021, 57.02, 'This is a book about cybersecurity 101 5.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978307818239731', 'Cloud Computing 4', 'John Smith', 2018, 115.41, 'This is a book about cloud computing 4.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978106967995749', 'Operating Systems 2', 'Emily Chan', 2014, 82.57, 'This is a book about operating systems 2.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978374945611267', 'Web Development 3', 'Alice Tan', 2011, 20.94, 'This is a book about web development 3.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978300126240007', 'Database Design 2', 'Jane Doe', 2002, 100.77, 'This is a book about database design 2.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978422163244009', 'Python Essentials 2', 'Jane Doe', 2008, 97.49, 'This is a book about python essentials 2.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978263701729101', 'Python Essentials 3', 'Emily Chan', 2014, 30.8, 'This is a book about python essentials 3.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978396733209342', 'Software Engineering 3', 'Jane Doe', 2002, 44.33, 'This is a book about software engineering 3.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978930468382419', 'Operating Systems 5', 'Alice Tan', 2004, 126.56, 'This is a book about operating systems 5.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978527703449123', 'Cloud Computing 2', 'John Smith', 2009, 120.74, 'This is a book about cloud computing 2.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978949147054427', 'Web Development 3', 'Emily Chan', 2006, 40.03, 'This is a book about web development 3.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978210701261571', 'Cybersecurity 101 1', 'Emily Chan', 2017, 88.37, 'This is a book about cybersecurity 101 1.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978565523649203', 'Cloud Computing 5', 'John Smith', 2010, 41.95, 'This is a book about cloud computing 5.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978248706205361', 'Database Design 1', 'Michael Lee', 2020, 52.2, 'This is a book about database design 1.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978770200228980', 'Mobile App Dev 4', 'Alice Tan', 2019, 55.44, 'This is a book about mobile app dev 4.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978992277455087', 'Web Development 5', 'Michael Lee', 2015, 35.81, 'This is a book about web development 5.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978799142834427', 'Database Design 2', 'Michael Lee', 2006, 95.47, 'This is a book about database design 2.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978756814510443', 'Database Design 1', 'John Smith', 2003, 104.03, 'This is a book about database design 1.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978125089731809', 'Database Design 2', 'Jane Doe', 2015, 36.41, 'This is a book about database design 2.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978430224098240', 'Software Engineering 4', 'Jane Doe', 2018, 79.21, 'This is a book about software engineering 4.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978358664446579', 'Cybersecurity 101 5', 'John Smith', 2004, 123.42, 'This is a book about cybersecurity 101 5.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978649100501508', 'Mobile App Dev 5', 'Emily Chan', 2018, 142.63, 'This is a book about mobile app dev 5.', 'Chinese');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978327257449613', 'Python Essentials 2', 'Michael Lee', 2000, 85.76, 'This is a book about python essentials 2.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978209939785296', 'Operating Systems 5', 'Alice Tan', 2023, 141.46, 'This is a book about operating systems 5.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978281281973001', 'Web Development 4', 'Emily Chan', 2006, 73.63, 'This is a book about web development 4.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978420057966693', 'AI Basics 2', 'John Smith', 2019, 88.11, 'This is a book about ai basics 2.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978190029955127', 'Intro to Java 2', 'Emily Chan', 2017, 93.1, 'This is a book about intro to java 2.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978960126264520', 'Software Engineering 3', 'Michael Lee', 2004, 126.57, 'This is a book about software engineering 3.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978100849738142', 'Cybersecurity 101 1', 'Alice Tan', 2000, 52.13, 'This is a book about cybersecurity 101 1.', 'English');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978344477681286', 'Database Design 1', 'John Smith', 2018, 143.19, 'This is a book about database design 1.', 'Malay');
+INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978802533807786', 'Database Design 5', 'Alice Tan', 2017, 112.62, 'This is a book about database design 5.', 'Malay');
+
+select count(*) as "No of Book"
+from Book;
