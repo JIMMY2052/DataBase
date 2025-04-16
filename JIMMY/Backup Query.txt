@@ -1,0 +1,25 @@
+SELECT 
+    CASE 
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE) THEN 
+            'Due Today (' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ')'
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE + 1) THEN 
+            'Due Tomorrow (' || TO_CHAR(SYSDATE + 1, 'YYYY-MM-DD') || ')'
+    END AS DueGroup,
+    M.MemberID,
+    M.Name,
+    B.Title,
+    BC.BookCopyID,
+    BB.BorrowDate,
+    BB.DueDate
+FROM 
+    BorrowBook BB
+JOIN 
+    Member M ON BB.MemberID = M.MemberID
+JOIN 
+    BookCopy BC ON BB.BookCopyID = BC.BookCopyID
+JOIN 
+    Book B ON BC.ISBN = B.ISBN
+WHERE 
+    TRUNC(BB.DueDate) IN (TRUNC(SYSDATE), TRUNC(SYSDATE + 1))
+ORDER BY 
+    DueGroup, M.Name;

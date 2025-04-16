@@ -1,0 +1,20 @@
+CREATE OR REPLACE VIEW DueBookSummary AS
+SELECT 
+    CASE 
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE) THEN 
+            'Due Today (' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ')'
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE + 1) THEN 
+            'Due Tomorrow (' || TO_CHAR(SYSDATE + 1, 'YYYY-MM-DD') || ')'
+    END AS Due_Group,
+    COUNT(*) AS "No of BookDue"
+FROM 
+    BorrowBook BB
+WHERE 
+    TRUNC(BB.DueDate) IN (TRUNC(SYSDATE), TRUNC(SYSDATE + 1))
+GROUP BY 
+    CASE 
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE) THEN 
+            'Due Today (' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ')'
+        WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE + 1) THEN 
+            'Due Tomorrow (' || TO_CHAR(SYSDATE + 1, 'YYYY-MM-DD') || ')'
+    END;
