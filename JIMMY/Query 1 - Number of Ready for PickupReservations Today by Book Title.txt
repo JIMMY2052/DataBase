@@ -1,0 +1,21 @@
+SET PAGESIZE 200
+COLUMN Title HEADING 'Book Title' FORMAT A40
+COLUMN TotalReservationsToday HEADING 'Total Reservation Today' FORMAT 9999
+
+BREAK ON REPORT
+COMPUTE SUM LABEL 'TOTAL' OF TotalReservationsToday ON REPORT
+
+SELECT 
+    B.Title,
+    COUNT(*) AS TotalReservationsToday
+FROM 
+    Reservation R
+JOIN 
+    Book B ON R.ISBN = B.ISBN
+WHERE 
+    R.Status = 'Ready for Pickup'
+    AND TRUNC(R.ReservationDate) = TRUNC(SYSDATE)
+GROUP BY 
+    B.Title
+ORDER BY 
+    TotalReservationsToday DESC;
