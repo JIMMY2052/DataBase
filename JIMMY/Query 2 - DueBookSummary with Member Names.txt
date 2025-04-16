@@ -6,9 +6,13 @@ SELECT
         WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE + 1) THEN 
             'Due Tomorrow (' || TO_CHAR(SYSDATE + 1, 'YYYY-MM-DD') || ')'
     END AS Due_Group,
+    M.MemberID,
+    M.Name AS MemberName,
     COUNT(*) AS "No of BookDue"
 FROM 
     BorrowBook BB
+JOIN 
+    Member M ON BB.MemberID = M.MemberID
 WHERE 
     TRUNC(BB.DueDate) IN (TRUNC(SYSDATE), TRUNC(SYSDATE + 1))
 GROUP BY 
@@ -17,4 +21,6 @@ GROUP BY
             'Due Today (' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ')'
         WHEN TRUNC(BB.DueDate) = TRUNC(SYSDATE + 1) THEN 
             'Due Tomorrow (' || TO_CHAR(SYSDATE + 1, 'YYYY-MM-DD') || ')'
-    END;
+    END,
+    M.MemberID,
+    M.Name;
