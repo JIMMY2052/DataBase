@@ -2,7 +2,7 @@ CREATE OR REPLACE PROCEDURE res IS
   v_memberID MEMBER.MemberID%TYPE;
   v_ISBN BOOK.ISBN%TYPE;
   v_BookCopyID BOOKCOPY.BookCopyID%TYPE;
-  v_found BOOLEAN := FALSE;  -- To check if any reservation was found
+  v_found BOOLEAN := FALSE;
 
   CURSOR reservation_cursor IS
     SELECT MemberID, ISBN
@@ -16,30 +16,31 @@ BEGIN
     FETCH reservation_cursor INTO v_memberID, v_ISBN;
     EXIT WHEN reservation_cursor%NOTFOUND;
 
-    v_found := TRUE;  -- At least one reservation found
+    v_found := TRUE;
 
     BEGIN
-      -- Try to find available book copy
+      -- Find available book copy
       SELECT BookCopyID
       INTO v_BookCopyID
       FROM BookCopy
-      WHERE ISBN = v_ISBN AND IsAvailable = 'Y' AND ROWNUM = 1;
+      WHERE ISBN = v_ISBN AND IsAvailable = 'Y'
+      AND ROWNUM = 1;
 
-      -- Update reservation
+      --  Update reservation status and pickup date
       UPDATE Reservation
-      SET Status = 'Ready for Pickup'
+      SET Status = 'Ready for Pickup',
+          ReadyForPickupDate = SYSDATE
       WHERE ISBN = v_ISBN AND MemberID = v_memberID;
 
-      -- Update book copy
+      -- Mark book copy as unavailable
       UPDATE BookCopy
       SET IsAvailable = 'N'
       WHERE BookCopyID = v_BookCopyID;
 
-      DBMS_OUTPUT.PUT_LINE(' Reservation for ' || v_memberID || ' (' || v_ISBN || ') set to Ready. BookCopy ' || v_BookCopyID || ' reserved.');
+      DBMS_OUTPUT.PUT_LINE('Reservation for ' || v_memberID || ' (' || v_ISBN || ') set to Ready. BookCopy ' || v_BookCopyID || ' reserved.');
 
     EXCEPTION
       WHEN NO_DATA_FOUND THEN
-        -- No available book copy for this reservation
         DBMS_OUTPUT.PUT_LINE('No available copy for ISBN ' || v_ISBN || '; skipping...');
     END;
   END LOOP;
@@ -47,7 +48,7 @@ BEGIN
   CLOSE reservation_cursor;
 
   IF NOT v_found THEN
-    DBMS_OUTPUT.PUT_LINE(' No reservations pending.');
+    DBMS_OUTPUT.PUT_LINE('No reservations pending.');
   END IF;
 
   COMMIT;
