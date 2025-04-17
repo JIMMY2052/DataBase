@@ -1,0 +1,34 @@
+CREATE OR REPLACE TRIGGER trg_audit_no_show_ban
+AFTER UPDATE ON Reservation
+FOR EACH ROW
+WHEN (
+  OLD.Status = 'Ready for Pickup' AND
+  NEW.Status = 'Expired'
+)
+DECLARE
+  v_NoShowCount NUMBER;
+BEGIN
+  -- 1. Get current no-show count BEFORE increment
+  SELECT NoShowCount INTO v_NoShowCount
+  FROM Member
+  WHERE MemberID = :NEW.MemberID;
+
+  -- 2. If this will be the 3rd no-show (i.e., count already 2)
+  IF v_NoShowCount = 2 THEN
+    -- Ban the member and reset count
+    UPDATE Member
+    SET ReservationBanUntil = SYSDATE + 7,
+        NoShowCount = 0
+    WHERE MemberID = :NEW.MemberID;
+
+    DBMS_OUTPUT.PUT_LINE('Member ' || :NEW.MemberID || ' banned for 7 days after 3 no-shows.');
+  ELSE
+    -- Just increment the no-show count
+    UPDATE Member
+    SET NoShowCount = NoShowCount + 1
+    WHERE MemberID = :NEW.MemberID;
+
+    DBMS_OUTPUT.PUT_LINE('No-show count increased to ' || (v_NoShowCount + 1) || ' for member ' || :NEW.MemberID);
+  END IF;
+END;
+/
