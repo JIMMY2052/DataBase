@@ -1,0 +1,41 @@
+CREATE OR REPLACE PROCEDURE Uncollected_Reservations
+IS
+  -- Local variables
+  v_MemberID    Reservation.MemberID%TYPE;
+  v_ISBN        Reservation.ISBN%TYPE;
+  v_BookCopyID  Reservation.BookCopyID%TYPE;
+
+  -- Cursor to find expired reservations
+  CURSOR expired_cursor IS
+    SELECT MemberID, ISBN, BookCopyID
+    FROM Reservation
+    WHERE Status = 'Ready for Pickup'
+      AND ReadyForPickupDate IS NOT NULL
+      AND TRUNC(ReadyForPickupDate + 3) <= TRUNC(SYSDATE);
+BEGIN
+  FOR rec IN expired_cursor LOOP
+    -- Assign to local variables (safe scope)
+    v_MemberID   := rec.MemberID;
+    v_ISBN       := rec.ISBN;
+    v_BookCopyID := rec.BookCopyID;
+
+    -- 1. Update reservation to 'Expired'
+    UPDATE Reservation
+    SET Status = 'Expired'
+    WHERE MemberID = v_MemberID AND ISBN = v_ISBN;
+
+    -- 2. Update book copy to available if ID is not null
+    IF v_BookCopyID IS NOT NULL THEN
+      UPDATE BookCopy
+      SET IsAvailable = 'Y'
+      WHERE BookCopyID = v_BookCopyID;
+    END IF;
+
+    -- Optional output
+    DBMS_OUTPUT.PUT_LINE('Expired reservation for Member ' || v_MemberID ||
+                         ', ISBN ' || v_ISBN || ', BookCopyID ' || v_BookCopyID);
+  END LOOP;
+
+  COMMIT;
+END;
+/

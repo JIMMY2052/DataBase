@@ -29,7 +29,8 @@ BEGIN
       --  Update reservation status and pickup date
       UPDATE Reservation
       SET Status = 'Ready for Pickup',
-          ReadyForPickupDate = SYSDATE
+          ReadyForPickupDate = SYSDATE,
+	  BookCopyId = v_BookCopyID
       WHERE ISBN = v_ISBN AND MemberID = v_memberID;
 
       -- Mark book copy as unavailable
