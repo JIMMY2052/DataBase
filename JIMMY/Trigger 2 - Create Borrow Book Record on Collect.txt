@@ -1,0 +1,29 @@
+CREATE OR REPLACE TRIGGER trg_create_borrow_on_collect
+AFTER UPDATE ON Reservation
+FOR EACH ROW
+WHEN (NEW.Status = 'Collected' AND OLD.Status != 'Collected')
+DECLARE
+  v_BorrowID VARCHAR2(10);
+BEGIN
+  -- 1. Get the next value from the sequence and format it
+  v_BorrowID := 'RC' || LPAD(SEQ_BorrowBookID.NEXTVAL, 4, '0');
+
+  -- 2. Insert new BorrowBook record
+  INSERT INTO BorrowBook (
+    BorrowBookID, MemberID, BookCopyID, BorrowDate, DueDate
+  ) VALUES (
+    v_BorrowID,
+    :NEW.MemberID,
+    :NEW.BookCopyID,
+    SYSDATE,
+    SYSDATE + 7
+  );
+
+  -- Optional message
+  DBMS_OUTPUT.PUT_LINE('BorrowBook created: ' || v_BorrowID ||
+                       ' for Member ' || :NEW.MemberID);
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE_APPLICATION_ERROR(-20011, 'Trigger failed: ' || SQLERRM);
+END;
+/
