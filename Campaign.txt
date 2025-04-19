@@ -1,0 +1,129 @@
+CREATE TABLE Campaign (
+    CampaignID         VARCHAR2(10) PRIMARY KEY,
+    StaffID            VARCHAR2(10),
+    CampaignName       VARCHAR2(100),
+    Description        VARCHAR2(300),
+    StartDate          DATE,
+    EndDate            DATE,
+    Conditions         VARCHAR2(200),
+    DiscountPercentage NUMBER(5,2),
+    ApprovalStatus     VARCHAR2(15) CHECK (ApprovalStatus IN ('Pending', 'Approved', 'Rejected')),
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
+INSERT INTO Campaign VALUES ('CMP001', 'STF001', 'Reading Week', 'Promotes book borrowing during school holidays.', TO_DATE('2025-01-01','YYYY-MM-DD'), TO_DATE('2025-01-07','YYYY-MM-DD'), 'All members', 10.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP002', 'STF002', 'Fiction Fever', 'Discounts on all fiction titles.', TO_DATE('2025-01-10','YYYY-MM-DD'), TO_DATE('2025-01-20','YYYY-MM-DD'), 'Fiction books only', 15.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP003', 'STF003', 'Exam Ready', 'Help students prepare for exams.', TO_DATE('2025-02-01','YYYY-MM-DD'), TO_DATE('2025-02-14','YYYY-MM-DD'), 'Educational materials', 12.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP004', 'STF004', 'Kids Corner', 'Promotes reading among children.', TO_DATE('2025-03-01','YYYY-MM-DD'), TO_DATE('2025-03-10','YYYY-MM-DD'), 'Children under 12', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP005', 'STF005', 'Weekend Reads', 'Weekend-only discounts on selected titles.', TO_DATE('2025-03-15','YYYY-MM-DD'), TO_DATE('2025-03-16','YYYY-MM-DD'), 'Weekend visitors', 18.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP006', 'STF006', 'Bookworm Bonus', 'Rewards frequent borrowers.', TO_DATE('2025-04-01','YYYY-MM-DD'), TO_DATE('2025-04-15','YYYY-MM-DD'), 'Borrowed more than 5 books', 25.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP007', 'STF007', 'Literature Month', 'Celebrating classic literature.', TO_DATE('2025-04-20','YYYY-MM-DD'), TO_DATE('2025-04-30','YYYY-MM-DD'), 'Classic novels only', 10.00, 'Rejected');
+INSERT INTO Campaign VALUES ('CMP008', 'STF008', 'Sci-Fi Sale', 'Discounts on all science fiction books.', TO_DATE('2025-05-01','YYYY-MM-DD'), TO_DATE('2025-05-10','YYYY-MM-DD'), 'Sci-Fi books', 22.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP009', 'STF009', 'Fantasy Fair', 'Special event for fantasy fans.', TO_DATE('2025-05-15','YYYY-MM-DD'), TO_DATE('2025-05-25','YYYY-MM-DD'), 'Fantasy genre', 17.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP010', 'STF010', 'Mystery Mania', 'For mystery lovers.', TO_DATE('2025-06-01','YYYY-MM-DD'), TO_DATE('2025-06-10','YYYY-MM-DD'), 'Mystery novels', 19.50, 'Pending');
+
+INSERT INTO Campaign VALUES ('CMP011', 'STF001', 'Romance Reads', 'Valentine special.', TO_DATE('2025-02-10','YYYY-MM-DD'), TO_DATE('2025-02-14','YYYY-MM-DD'), 'Romance genre', 14.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP012', 'STF002', 'Mid-Year Madness', 'Massive mid-year promotions.', TO_DATE('2025-06-15','YYYY-MM-DD'), TO_DATE('2025-06-30','YYYY-MM-DD'), 'All books', 30.00, 'Rejected');
+INSERT INTO Campaign VALUES ('CMP013', 'STF003', 'Language Learning', 'Promotes language books.', TO_DATE('2025-07-01','YYYY-MM-DD'), TO_DATE('2025-07-10','YYYY-MM-DD'), 'Language learning materials', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP014', 'STF004', 'Young Adult Promo', 'YA novels on promotion.', TO_DATE('2025-07-15','YYYY-MM-DD'), TO_DATE('2025-07-25','YYYY-MM-DD'), 'Young Adult genre', 13.50, 'Pending');
+INSERT INTO Campaign VALUES ('CMP015', 'STF005', 'Non-Fiction Fest', 'Focus on biographies, history, etc.', TO_DATE('2025-08-01','YYYY-MM-DD'), TO_DATE('2025-08-10','YYYY-MM-DD'), 'Non-fiction books', 21.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP016', 'STF006', 'Comics Carnival', 'Manga and graphic novels.', TO_DATE('2025-08-15','YYYY-MM-DD'), TO_DATE('2025-08-20','YYYY-MM-DD'), 'Comics and Manga', 26.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP017', 'STF007', 'Horror Harvest', 'Spooky season sales.', TO_DATE('2025-10-01','YYYY-MM-DD'), TO_DATE('2025-10-31','YYYY-MM-DD'), 'Horror books', 23.00, 'Rejected');
+INSERT INTO Campaign VALUES ('CMP018', 'STF008', 'Finals Prep', 'Students prep event.', TO_DATE('2025-11-01','YYYY-MM-DD'), TO_DATE('2025-11-15','YYYY-MM-DD'), 'Exam materials', 28.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP019', 'STF009', 'New Year Kickstart', 'Start the year reading.', TO_DATE('2025-12-28','YYYY-MM-DD'), TO_DATE('2026-01-05','YYYY-MM-DD'), 'All genres', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP020', 'STF010', 'Golden Reader Awards', 'Reward most active readers.', TO_DATE('2025-12-01','YYYY-MM-DD'), TO_DATE('2025-12-15','YYYY-MM-DD'), 'Top borrowers only', 30.00, 'Pending');
+
+INSERT INTO Campaign VALUES ('CMP021', 'STF001', 'Library Lovers Month', 'Celebrate library users with perks.', TO_DATE('2025-02-01','YYYY-MM-DD'), TO_DATE('2025-02-28','YYYY-MM-DD'), 'All Members', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP022', 'STF002', 'Back to School', 'Support students with discounts.', TO_DATE('2025-01-05','YYYY-MM-DD'), TO_DATE('2025-01-15','YYYY-MM-DD'), 'Students only', 10.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP023', 'STF003', 'Self-Help Splash', 'Self-improvement books sale.', TO_DATE('2025-03-01','YYYY-MM-DD'), TO_DATE('2025-03-10','YYYY-MM-DD'), 'Self-help genre', 12.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP024', 'STF004', 'Thriller Week', 'Thriller books discount.', TO_DATE('2025-04-05','YYYY-MM-DD'), TO_DATE('2025-04-12','YYYY-MM-DD'), 'Thriller novels', 14.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP025', 'STF005', 'Biography Boost', 'Highlighting influential lives.', TO_DATE('2025-05-01','YYYY-MM-DD'), TO_DATE('2025-05-10','YYYY-MM-DD'), 'Biographies only', 18.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP026', 'STF006', 'History Hunt', 'For history enthusiasts.', TO_DATE('2025-06-01','YYYY-MM-DD'), TO_DATE('2025-06-15','YYYY-MM-DD'), 'History books', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP027', 'STF007', 'Poetry Parade', 'Celebrate World Poetry Day.', TO_DATE('2025-03-21','YYYY-MM-DD'), TO_DATE('2025-03-25','YYYY-MM-DD'), 'Poetry genre', 11.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP028', 'STF008', 'Drama Days', 'Drama books promotion.', TO_DATE('2025-05-05','YYYY-MM-DD'), TO_DATE('2025-05-15','YYYY-MM-DD'), 'Drama books', 13.50, 'Rejected');
+INSERT INTO Campaign VALUES ('CMP029', 'STF009', 'Weekend Wonders', 'Weekend exclusive deals.', TO_DATE('2025-06-07','YYYY-MM-DD'), TO_DATE('2025-06-08','YYYY-MM-DD'), 'All members', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP030', 'STF010', 'Learning Leap', 'Academic books special.', TO_DATE('2025-07-10','YYYY-MM-DD'), TO_DATE('2025-07-20','YYYY-MM-DD'), 'Academic titles', 22.00, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP031', 'STF001', 'Weekend Writers', 'Writing resources on sale.', TO_DATE('2025-08-01','YYYY-MM-DD'), TO_DATE('2025-08-07','YYYY-MM-DD'), 'Writers only', 10.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP032', 'STF002', 'Coding Carnival', 'Computer books discount.', TO_DATE('2025-08-10','YYYY-MM-DD'), TO_DATE('2025-08-20','YYYY-MM-DD'), 'Technology genre', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP033', 'STF003', 'Banned Books Week', 'Support freedom to read.', TO_DATE('2025-09-22','YYYY-MM-DD'), TO_DATE('2025-09-29','YYYY-MM-DD'), 'Selected titles', 15.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP034', 'STF004', 'Mystery March', 'Mystery genre spotlight.', TO_DATE('2025-03-01','YYYY-MM-DD'), TO_DATE('2025-03-07','YYYY-MM-DD'), 'Mystery genre', 12.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP035', 'STF005', 'Language Lovers', 'Books in foreign languages.', TO_DATE('2025-10-01','YYYY-MM-DD'), TO_DATE('2025-10-10','YYYY-MM-DD'), 'Language learning books', 14.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP036', 'STF006', 'Veteran Voices', 'Memoirs of veterans.', TO_DATE('2025-11-01','YYYY-MM-DD'), TO_DATE('2025-11-11','YYYY-MM-DD'), 'Military genre', 19.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP037', 'STF007', 'Cookbook Craze', 'Cookbooks special offer.', TO_DATE('2025-12-01','YYYY-MM-DD'), TO_DATE('2025-12-07','YYYY-MM-DD'), 'Cookbooks', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP038', 'STF008', 'Art Appreciation', 'Art and design books.', TO_DATE('2025-07-15','YYYY-MM-DD'), TO_DATE('2025-07-25','YYYY-MM-DD'), 'Art section', 11.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP039', 'STF009', 'Financial Focus', 'Finance and investing books.', TO_DATE('2025-04-10','YYYY-MM-DD'), TO_DATE('2025-04-20','YYYY-MM-DD'), 'Finance books', 13.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP040', 'STF010', 'Sustainability Reads', 'Environment and nature books.', TO_DATE('2025-04-22','YYYY-MM-DD'), TO_DATE('2025-04-30','YYYY-MM-DD'), 'Eco-friendly titles', 17.00, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP041', 'STF001', 'Engineering Edge', 'Engineering books discount.', TO_DATE('2025-05-01','YYYY-MM-DD'), TO_DATE('2025-05-10','YYYY-MM-DD'), 'Engineering materials', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP042', 'STF002', 'Math Mania', 'Math books promo.', TO_DATE('2025-06-01','YYYY-MM-DD'), TO_DATE('2025-06-08','YYYY-MM-DD'), 'Mathematics books', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP043', 'STF003', 'Psych Reads', 'Psychology genre promotion.', TO_DATE('2025-06-10','YYYY-MM-DD'), TO_DATE('2025-06-20','YYYY-MM-DD'), 'Psychology books', 14.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP044', 'STF004', 'Wellness Week', 'Mental health awareness', TO_DATE('2025-10-01','YYYY-MM-DD'), TO_DATE('2025-10-07','YYYY-MM-DD'), 'Wellness  health books', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP045', 'STF005', 'Teachers Toolbox', 'Resources for educators.', TO_DATE('2025-09-01','YYYY-MM-DD'), TO_DATE('2025-09-10','YYYY-MM-DD'), 'Teaching materials', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP046', 'STF006', 'Parenting Picks', 'Books for parents.', TO_DATE('2025-08-05','YYYY-MM-DD'), TO_DATE('2025-08-15','YYYY-MM-DD'), 'Parenting genre', 12.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP047', 'STF007', 'Animal Kingdom', 'Books about wildlife.', TO_DATE('2025-07-01','YYYY-MM-DD'), TO_DATE('2025-07-07','YYYY-MM-DD'), 'Animals  nature', 11.50, 'Rejected');
+INSERT INTO Campaign VALUES ('CMP048', 'STF008', 'Festival of Knowledge', 'Wide range of books on promotion.', TO_DATE('2025-09-15','YYYY-MM-DD'), TO_DATE('2025-09-30','YYYY-MM-DD'), 'All categories', 25.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP049', 'STF009', 'Graphic Grab', 'Graphic novels and comics.', TO_DATE('2025-11-10','YYYY-MM-DD'), TO_DATE('2025-11-17','YYYY-MM-DD'), 'Comics/Graphic Novels', 20.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP050', 'STF010', 'Golden Hour', 'Short term flash sale.', TO_DATE('2025-12-15','YYYY-MM-DD'), TO_DATE('2025-12-16','YYYY-MM-DD'), 'Selected books', 30.00, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP051', 'STF001', 'Young Adult Year-End', 'YA books end-year sale.', TO_DATE('2025-12-20','YYYY-MM-DD'), TO_DATE('2025-12-31','YYYY-MM-DD'), 'Young Adult genre', 17.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP052', 'STF002', 'Summer Stories', 'Fiction for the summer holidays.', TO_DATE('2025-06-21','YYYY-MM-DD'), TO_DATE('2025-07-05','YYYY-MM-DD'), 'Fiction genre', 19.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP053', 'STF003', 'eBook Extravaganza', 'Digital books only.', TO_DATE('2025-04-01','YYYY-MM-DD'), TO_DATE('2025-04-10','YYYY-MM-DD'), 'eBooks', 10.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP054', 'STF004', 'Health is Wealth', 'Health and fitness titles.', TO_DATE('2025-03-15','YYYY-MM-DD'), TO_DATE('2025-03-25','YYYY-MM-DD'), 'Health genre', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP055', 'STF005', 'Classic Collection', 'Timeless classics promo.', TO_DATE('2025-01-15','YYYY-MM-DD'), TO_DATE('2025-01-31','YYYY-MM-DD'), 'Classic literature', 22.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP056', 'STF006', 'Romance Reads', 'Valentines Day special.', TO_DATE('2025-02-10','YYYY-MM-DD'), TO_DATE('2025-02-14','YYYY-MM-DD'), 'Romance genre', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP057', 'STF007', 'Sci-Fi Surge', 'Science fiction lovers!', TO_DATE('2025-05-04','YYYY-MM-DD'), TO_DATE('2025-05-11','YYYY-MM-DD'), 'Science Fiction', 18.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP058', 'STF008', 'Fantasy Fair', 'Fantasy books discount.', TO_DATE('2025-10-10','YYYY-MM-DD'), TO_DATE('2025-10-20','YYYY-MM-DD'), 'Fantasy genre', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP059', 'STF009', 'Local Author Launchpad', 'Promoting homegrown writers.', TO_DATE('2025-07-15','YYYY-MM-DD'), TO_DATE('2025-07-25','YYYY-MM-DD'), 'Local authors only', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP060', 'STF010', 'Quick Reads Promo', 'Books under 200 pages.', TO_DATE('2025-08-18','YYYY-MM-DD'), TO_DATE('2025-08-25','YYYY-MM-DD'), 'Short books', 12.00, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP061', 'STF001', 'Womens Words', 'Celebrating women authors.', TO_DATE('2025-03-08','YYYY-MM-DD'), TO_DATE('2025-03-14','YYYY-MM-DD'), 'Female authors', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP062', 'STF002', 'Mens Month Reads', 'Books written by or for men.', TO_DATE('2025-11-01','YYYY-MM-DD'), TO_DATE('2025-11-10','YYYY-MM-DD'), 'Mens interest', 13.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP063', 'STF003', 'Culture Connect', 'Multicultural literature.', TO_DATE('2025-10-15','YYYY-MM-DD'), TO_DATE('2025-10-25','YYYY-MM-DD'), 'Cultural genre', 14.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP064', 'STF004', 'Binge-Read Bonanza', 'Series and trilogies promo.', TO_DATE('2025-05-20','YYYY-MM-DD'), TO_DATE('2025-05-31','YYYY-MM-DD'), 'Book series', 20.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP065', 'STF005', 'Dark Academia Week', 'Mystery-academic crossover.', TO_DATE('2025-09-05','YYYY-MM-DD'), TO_DATE('2025-09-12','YYYY-MM-DD'), 'Dark Academia', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP066', 'STF006', 'Mental Health Month', 'Awareness and wellness titles.', TO_DATE('2025-10-01','YYYY-MM-DD'), TO_DATE('2025-10-31','YYYY-MM-DD'), 'Self-help genre', 19.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP067', 'STF007', 'Global Literature', 'Translated works promotion.', TO_DATE('2025-08-12','YYYY-MM-DD'), TO_DATE('2025-08-22','YYYY-MM-DD'), 'International books', 21.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP068', 'STF008', 'True Crime Picks', 'Non-fiction crime stories.', TO_DATE('2025-06-15','YYYY-MM-DD'), TO_DATE('2025-06-25','YYYY-MM-DD'), 'True crime genre', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP069', 'STF009', 'Beginners Choice', 'Books for new readers.', TO_DATE('2025-04-01','YYYY-MM-DD'), TO_DATE('2025-04-07','YYYY-MM-DD'), 'Beginner level', 12.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP070', 'STF010', 'Book Club Specials', 'For reading groups.', TO_DATE('2025-09-20','YYYY-MM-DD'), TO_DATE('2025-09-30','YYYY-MM-DD'), 'Book club picks', 17.50, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP071', 'STF001', 'Spring Reads', 'Fresh reads for spring.', TO_DATE('2025-03-20','YYYY-MM-DD'), TO_DATE('2025-03-31','YYYY-MM-DD'), 'Seasonal picks', 14.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP072', 'STF002', 'Academic Essentials', 'Reference books for students.', TO_DATE('2025-01-10','YYYY-MM-DD'), TO_DATE('2025-01-20','YYYY-MM-DD'), 'Academic resources', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP073', 'STF003', 'Earth Day Focus', 'Eco-awareness reads.', TO_DATE('2025-04-22','YYYY-MM-DD'), TO_DATE('2025-04-28','YYYY-MM-DD'), 'Environment genre', 15.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP074', 'STF004', 'Mindful Mornings', 'Books on mindfulness and clarity.', TO_DATE('2025-05-05','YYYY-MM-DD'), TO_DATE('2025-05-12','YYYY-MM-DD'), 'Mindfulness books', 13.00, 'Pending');
+INSERT INTO Campaign VALUES ('CMP075', 'STF005', 'DIY Days', 'Do-it-yourself and craft books.', TO_DATE('2025-07-01','YYYY-MM-DD'), TO_DATE('2025-07-10','YYYY-MM-DD'), 'Crafts and hobbies', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP076', 'STF006', 'History Highlights', 'Top history titles.', TO_DATE('2025-06-05','YYYY-MM-DD'), TO_DATE('2025-06-15','YYYY-MM-DD'), 'History genre', 16.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP077', 'STF007', 'Business Boost', 'Leadership and entrepreneurship.', TO_DATE('2025-08-01','YYYY-MM-DD'), TO_DATE('2025-08-10','YYYY-MM-DD'), 'Business books', 19.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP078', 'STF008', 'Poetry Parade', 'Celebrating poets and verses.', TO_DATE('2025-04-01','YYYY-MM-DD'), TO_DATE('2025-04-07','YYYY-MM-DD'), 'Poetry', 12.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP079', 'STF009', 'Summer Non-Fic', 'Hot non-fiction reads.', TO_DATE('2025-07-15','YYYY-MM-DD'), TO_DATE('2025-07-25','YYYY-MM-DD'), 'Non-fiction', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP080', 'STF010', 'Kids Corner', 'Books for children ages between 3 and 10.', TO_DATE('2025-06-01','YYYY-MM-DD'), TO_DATE('2025-06-10','YYYY-MM-DD'), 'Childrens books', 14.50, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP081', 'STF001', 'Thriller Thursdays', 'Weekly thriller spotlight.', TO_DATE('2025-10-02','YYYY-MM-DD'), TO_DATE('2025-10-09','YYYY-MM-DD'), 'Thriller genre', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP082', 'STF002', 'Weekend Wisdom', 'Self-development reads.', TO_DATE('2025-05-24','YYYY-MM-DD'), TO_DATE('2025-05-26','YYYY-MM-DD'), 'Self-help books', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP083', 'STF003', 'Bookworm Blast', 'General library-wide promo.', TO_DATE('2025-12-01','YYYY-MM-DD'), TO_DATE('2025-12-10','YYYY-MM-DD'), 'All genres', 25.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP084', 'STF004', 'Librarian Picks', 'Curated staff recommendations.', TO_DATE('2025-02-15','YYYY-MM-DD'), TO_DATE('2025-02-25','YYYY-MM-DD'), 'Selected picks', 17.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP085', 'STF005', 'Golden Authors', 'Award-winning authors.', TO_DATE('2025-06-15','YYYY-MM-DD'), TO_DATE('2025-06-30','YYYY-MM-DD'), 'Award-winning books', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP086', 'STF006', 'Vintage Vault', 'Old but gold classics.', TO_DATE('2025-03-01','YYYY-MM-DD'), TO_DATE('2025-03-10','YYYY-MM-DD'), 'Vintage books', 13.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP087', 'STF007', 'Modern Must-Reads', 'Latest popular books.', TO_DATE('2025-01-05','YYYY-MM-DD'), TO_DATE('2025-01-12','YYYY-MM-DD'), 'Modern bestsellers', 22.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP088', 'STF008', 'Inspiration Station', 'Motivational reading week.', TO_DATE('2025-04-15','YYYY-MM-DD'), TO_DATE('2025-04-22','YYYY-MM-DD'), 'Motivational books', 15.50, 'Pending');
+INSERT INTO Campaign VALUES ('CMP089', 'STF009', 'Foodies Shelf', 'Cookbooks and food culture.', TO_DATE('2025-11-01','YYYY-MM-DD'), TO_DATE('2025-11-10','YYYY-MM-DD'), 'Cooking and food', 18.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP090', 'STF010', 'Winter Wonders', 'Cozy wintertime reads.', TO_DATE('2025-12-10','YYYY-MM-DD'), TO_DATE('2025-12-24','YYYY-MM-DD'), 'Seasonal reads', 16.00, 'Approved');
+
+INSERT INTO Campaign VALUES ('CMP091', 'STF001', 'Thriller Thursdays', 'Weekly thriller spotlight.', TO_DATE('2025-10-02','YYYY-MM-DD'), TO_DATE('2025-10-09','YYYY-MM-DD'), 'Thriller genre', 18.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP092', 'STF002', 'Weekend Wisdom', 'Self-development reads.', TO_DATE('2025-05-24','YYYY-MM-DD'), TO_DATE('2025-05-26','YYYY-MM-DD'), 'Self-help books', 15.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP093', 'STF003', 'Bookworm Blast', 'General library-wide promo.', TO_DATE('2025-12-01','YYYY-MM-DD'), TO_DATE('2025-12-10','YYYY-MM-DD'), 'All genres', 25.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP094', 'STF004', 'Librarians Picks', 'Curated staff recommendations.', TO_DATE('2025-02-15','YYYY-MM-DD'), TO_DATE('2025-02-25','YYYY-MM-DD'), 'Selected picks', 17.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP095', 'STF005', 'Golden Authors', 'Award-winning authors.', TO_DATE('2025-06-15','YYYY-MM-DD'), TO_DATE('2025-06-30','YYYY-MM-DD'), 'Award-winning books', 20.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP096', 'STF006', 'Vintage Vault', 'Old but gold classics.', TO_DATE('2025-03-01','YYYY-MM-DD'), TO_DATE('2025-03-10','YYYY-MM-DD'), 'Vintage books', 13.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP097', 'STF007', 'Modern Must-Reads', 'Latest popular books.', TO_DATE('2025-01-05','YYYY-MM-DD'), TO_DATE('2025-01-12','YYYY-MM-DD'), 'Modern bestsellers', 22.00, 'Approved');
+INSERT INTO Campaign VALUES ('CMP098', 'STF008', 'Inspiration Station', 'Motivational reading week.', TO_DATE('2025-04-15','YYYY-MM-DD'), TO_DATE('2025-04-22','YYYY-MM-DD'), 'Motivational books', 15.50, 'Pending');
+INSERT INTO Campaign VALUES ('CMP099', 'STF009', 'Foodies Shelf', 'Cookbooks and food culture.', TO_DATE('2025-11-01','YYYY-MM-DD'), TO_DATE('2025-11-10','YYYY-MM-DD'), 'Cooking and food', 18.50, 'Approved');
+INSERT INTO Campaign VALUES ('CMP100', 'STF010', 'Winter Wonders', 'Cozy wintertime reads.', TO_DATE('2025-12-10','YYYY-MM-DD'), TO_DATE('2025-12-24','YYYY-MM-DD'), 'Seasonal reads', 16.00, 'Approved');
+
+
+
+--100 rows
+
+select count(*) as "No of Campaign"
+from Campaign;
