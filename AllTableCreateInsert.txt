@@ -1,0 +1,2 @@
+drop table Genre;
+drop table BookGenre;
