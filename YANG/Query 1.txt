@@ -1,3 +1,5 @@
+CREATE OR REPLACE VIEW check_overdue_unpaid_fines AS
+
 SET LINESIZE 220;
 
 SELECT 
