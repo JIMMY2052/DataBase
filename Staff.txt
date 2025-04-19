@@ -1,11 +1,25 @@
+DROP TABLE Staff;
+
 CREATE TABLE Staff (
-    StaffID            VARCHAR2(10) PRIMARY KEY,
-    Name               VARCHAR2(100) NOT NULL,
-    Email              VARCHAR2(100),
-    PhoneNumber        VARCHAR2(20),
-    Role               VARCHAR2(20),
-    Status             VARCHAR2(10) DEFAULT 'Active' CHECK (Status IN ('Active', 'Inactive'))
+    StaffID VARCHAR2(10) NOT NULL PRIMARY KEY,
+    Name VARCHAR2(100) NOT NULL,
+    Email VARCHAR2(100) NOT NULL,
+    PhoneNumber VARCHAR2(20) NOT NULL,
+    Role VARCHAR2(20) NOT NULL,
+    Status VARCHAR2(10) DEFAULT 'Active' 
+        CHECK (Status IN ('Active', 'Inactive')),
+    
+    -- Format Checks
+    CONSTRAINT chk_staffid_format 
+        CHECK (REGEXP_LIKE(StaffID, '^S[0-9]{3}$')),
+    
+    CONSTRAINT chk_email_format 
+        CHECK (REGEXP_LIKE(Email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')),
+    
+    CONSTRAINT chk_phone_format 
+        CHECK (REGEXP_LIKE(PhoneNumber, '^[0-9]{10,11}$'))
 );
+
 
 INSERT INTO Staff VALUES ('STF001', 'Alice Tan', 'alice.tan@example.com', '0123456789', 'Manager', 'Active');
 INSERT INTO Staff VALUES ('STF002', 'Ben Lim', 'ben.lim@example.com', '0112345678', 'Assistant', 'Active');

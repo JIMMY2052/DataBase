@@ -1,13 +1,21 @@
+DROP TABLE Invoice;
+
 CREATE TABLE Invoice (
-    InvoiceID          VARCHAR2(10) PRIMARY KEY,
-    FineID             VARCHAR2(10),
-    IssueDate          DATE DEFAULT SYSDATE,
-    Amount             NUMBER(8,2),
-    PaymentDate        DATE,
-    PaymentMethod      VARCHAR2(20),
-    Remark             VARCHAR2(100),
+    InvoiceID VARCHAR2(10) NOT NULL PRIMARY KEY ,
+    FineID VARCHAR2(10),
+    IssueDate DATE DEFAULT SYSDATE,
+    Amount NUMBER(8,2),
+    PaymentDate DATE,
+    PaymentMethod VARCHAR2(20),
+    Remark VARCHAR2(100),
+
+    -- Format Check for InvoiceID (e.g., INV001, INV123)
+    CONSTRAINT chk_invoiceid_format 
+        CHECK (REGEXP_LIKE(InvoiceID, '^INV[0-9]{3}$')),
+
     FOREIGN KEY (FineID) REFERENCES Fine(FineID)
 );
+
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV001', 'F001', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 6.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');

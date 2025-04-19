@@ -1,15 +1,24 @@
+DROP TABLE Campaign;
+
 CREATE TABLE Campaign (
-    CampaignID         VARCHAR2(10) PRIMARY KEY,
-    StaffID            VARCHAR2(10),
-    CampaignName       VARCHAR2(100),
-    Description        VARCHAR2(300),
-    StartDate          DATE,
-    EndDate            DATE,
-    Conditions         VARCHAR2(200),
+    CampaignID VARCHAR2(10) NOT NULL PRIMARY KEY,
+    StaffID VARCHAR2(10) NOT NULL,
+    CampaignName VARCHAR2(100),
+    Description VARCHAR2(300),
+    StartDate DATE,
+    EndDate DATE,
+    Conditions VARCHAR2(200),
     DiscountPercentage NUMBER(5,2),
-    ApprovalStatus     VARCHAR2(15) CHECK (ApprovalStatus IN ('Pending', 'Approved', 'Rejected')),
+    ApprovalStatus VARCHAR2(15) 
+        CHECK (ApprovalStatus IN ('Pending', 'Approved', 'Rejected')),
+
+    -- Format Check for CampaignID (e.g., CMP001, CMP123)
+    CONSTRAINT chk_campaignid_format 
+        CHECK (REGEXP_LIKE(CampaignID, '^CMP[0-9]{3}$')),
+
     FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
 );
+
 
 INSERT INTO Campaign VALUES ('CMP001', 'STF001', 'Reading Week', 'Promotes book borrowing during school holidays.', TO_DATE('2025-01-01','YYYY-MM-DD'), TO_DATE('2025-01-07','YYYY-MM-DD'), 'All members', 10.00, 'Approved');
 INSERT INTO Campaign VALUES ('CMP002', 'STF002', 'Fiction Fever', 'Discounts on all fiction titles.', TO_DATE('2025-01-10','YYYY-MM-DD'), TO_DATE('2025-01-20','YYYY-MM-DD'), 'Fiction books only', 15.00, 'Pending');
