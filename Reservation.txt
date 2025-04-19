@@ -312,4 +312,9 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M037', NULL, '978196740169139', 'BC0022', TO_DATE('2025-01-23', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M004', NULL, '978413383564627', 'BC0036', TO_DATE('2024-02-18', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M028', TO_DATE('2024-09-03', 'YYYY-MM-DD'), '978396733209342', 'BC0061', TO_DATE('2024-09-02', 'YYYY-MM-DD'), 'Ready for Pickup');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M038', NULL, '978422163244009', 'BC0073', TO_DATE('2024-12-17', 'YYYY-MM-DD'), 'Pending');from Reservation;
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M038', NULL, '978422163244009', 'BC0073', TO_DATE('2024-12-17', 'YYYY-MM-DD'), 'Pending');
+
+--300 rows
+
+select count(*) as "No of Reservation"
+from Reservation;
