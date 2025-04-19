@@ -1,0 +1,25 @@
+CREATE TABLE Staff (
+    StaffID            VARCHAR2(10) PRIMARY KEY,
+    Name               VARCHAR2(100) NOT NULL,
+    Email              VARCHAR2(100),
+    PhoneNumber        VARCHAR2(20),
+    Role               VARCHAR2(20),
+    Status             VARCHAR2(10) DEFAULT 'Active' CHECK (Status IN ('Active', 'Inactive'))
+);
+
+INSERT INTO Staff VALUES ('STF001', 'Alice Tan', 'alice.tan@example.com', '0123456789', 'Manager', 'Active');
+INSERT INTO Staff VALUES ('STF002', 'Ben Lim', 'ben.lim@example.com', '0112345678', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF003', 'Catherine Ong', 'catherine.ong@example.com', '0134567890', 'Executive', 'Inactive');
+INSERT INTO Staff VALUES ('STF004', 'David Lee', 'david.lee@example.com', '0145678901', 'Manager', 'Active');
+INSERT INTO Staff VALUES ('STF005', 'Elaine Ng', 'elaine.ng@example.com', '0156789012', 'Executive', 'Active');
+INSERT INTO Staff VALUES ('STF006', 'Faizal Rahman', 'faizal.rahman@example.com', '0167890123', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF007', 'Grace Low', 'grace.low@example.com', '0178901234', 'Manager', 'Inactive');
+INSERT INTO Staff VALUES ('STF008', 'Hafiz Ahmad', 'hafiz.ahmad@example.com', '0189012345', 'Executive', 'Active');
+INSERT INTO Staff VALUES ('STF009', 'Irene Teo', 'irene.teo@example.com', '0190123456', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF010', 'Jason Chua', 'jason.chua@example.com', '0121098765', 'Executive', 'Active');
+
+
+--10 rows
+
+select count(*) as "No of Staff"
+from staff;
