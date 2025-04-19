@@ -1,0 +1,116 @@
+CREATE TABLE Fine (
+    FineID             VARCHAR2(10) PRIMARY KEY,
+    CampaignID         VARCHAR2(10),
+    BorrowBookID       VARCHAR2(10) NOT NULL,
+    Amount             NUMBER(8,2),
+    FineStatus         VARCHAR2(15) CHECK (FineStatus IN ('Unpaid', 'Paid')),
+    FOREIGN KEY (CampaignID) REFERENCES Campaign(CampaignID),
+    FOREIGN KEY (BorrowBookID) REFERENCES BorrowBook(BorrowBookID)
+);
+
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F001', NULL, 'BB0001', 6.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F002', NULL, 'BB0002', 8.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F003', NULL, 'BB0003', 8.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F004', NULL, 'BB0004', 9.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F005', 'CMP005', 'BB0005', 11.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F006', NULL, 'BB0006', 11.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F007', NULL, 'BB0007', 12.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F008', NULL, 'BB0008', 14.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F009', NULL, 'BB0009', 14.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F010', 'CMP010', 'BB0010', 15.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F011', NULL, 'BB0011', 17.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F012', NULL, 'BB0012', 17.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F013', NULL, 'BB0013', 18.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F014', NULL, 'BB0014', 20.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F015', 'CMP015', 'BB0015', 20.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F016', NULL, 'BB0016', 21.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F017', NULL, 'BB0017', 23.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F018', NULL, 'BB0018', 23.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F019', NULL, 'BB0019', 24.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F020', 'CMP020', 'BB0020', 26.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F021', NULL, 'BB0021', 26.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F022', NULL, 'BB0022', 27.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F023', NULL, 'BB0023', 29.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F024', NULL, 'BB0024', 29.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F025', 'CMP025', 'BB0025', 30.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F026', NULL, 'BB0026', 32.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F027', NULL, 'BB0027', 32.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F028', NULL, 'BB0028', 33.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F029', NULL, 'BB0029', 35.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F030', 'CMP030', 'BB0030', 35.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F031', NULL, 'BB0031', 36.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F032', NULL, 'BB0032', 38.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F033', NULL, 'BB0033', 38.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F034', NULL, 'BB0034', 39.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F035', 'CMP035', 'BB0035', 41.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F036', NULL, 'BB0036', 41.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F037', NULL, 'BB0037', 42.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F038', NULL, 'BB0038', 44.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F039', NULL, 'BB0039', 44.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F040', 'CMP040', 'BB0040', 45.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F041', NULL, 'BB0041', 47.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F042', NULL, 'BB0042', 47.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F043', NULL, 'BB0043', 48.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F044', NULL, 'BB0044', 50.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F045', 'CMP045', 'BB0045', 50.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F046', NULL, 'BB0046', 5.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F047', NULL, 'BB0047', 7.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F048', NULL, 'BB0048', 7.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F049', NULL, 'BB0049', 8.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F050', 'CMP050', 'BB0050', 10.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F051', NULL, 'BB0051', 10.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F052', NULL, 'BB0052', 11.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F053', NULL, 'BB0053', 13.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F054', NULL, 'BB0054', 13.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F055', 'CMP055', 'BB0055', 14.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F056', NULL, 'BB0056', 16.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F057', NULL, 'BB0057', 16.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F058', NULL, 'BB0058', 17.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F059', NULL, 'BB0059', 19.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F060', 'CMP060', 'BB0060', 19.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F061', NULL, 'BB0061', 20.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F062', NULL, 'BB0062', 22.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F063', NULL, 'BB0063', 22.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F064', NULL, 'BB0064', 23.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F065', 'CMP065', 'BB0065', 25.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F066', NULL, 'BB0066', 25.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F067', NULL, 'BB0067', 26.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F068', NULL, 'BB0068', 28.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F069', NULL, 'BB0069', 28.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F070', 'CMP070', 'BB0070', 29.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F071', NULL, 'BB0071', 31.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F072', NULL, 'BB0072', 31.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F073', NULL, 'BB0073', 32.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F074', NULL, 'BB0074', 34.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F075', 'CMP075', 'BB0075', 34.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F076', NULL, 'BB0076', 35.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F077', NULL, 'BB0077', 37.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F078', NULL, 'BB0078', 37.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F079', NULL, 'BB0079', 38.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F080', 'CMP080', 'BB0080', 40.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F081', NULL, 'BB0081', 40.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F082', NULL, 'BB0082', 41.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F083', NULL, 'BB0083', 43.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F084', NULL, 'BB0084', 43.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F085', 'CMP085', 'BB0085', 44.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F086', NULL, 'BB0086', 46.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F087', NULL, 'BB0087', 46.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F088', NULL, 'BB0088', 47.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F089', NULL, 'BB0089', 49.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F090', 'CMP090', 'BB0090', 49.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F091', NULL, 'BB0091', 50.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F092', NULL, 'BB0092', 6.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F093', NULL, 'BB0093', 6.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F094', NULL, 'BB0094', 7.75, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F095', 'CMP095', 'BB0095', 9.5, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F096', NULL, 'BB0096', 9.0, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F097', NULL, 'BB0097', 10.75, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F098', NULL, 'BB0098', 12.5, 'Paid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F099', NULL, 'BB0099', 12.0, 'Unpaid');
+INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, FineStatus) VALUES ('F100', 'CMP100', 'BB0100', 13.75, 'Paid');
+
+
+--100 rows
+
+select count(*) as "No of Fine"
+from Fine;
