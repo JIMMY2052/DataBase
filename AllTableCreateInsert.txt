@@ -152,103 +152,54 @@ CREATE TABLE BookGenre (
 );
 
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00001', 'Member_1', 'member1@example.com', '0178904855', TO_DATE('2021-04-22', 'YYYY-MM-DD'), TO_DATE('2024-04-21', 'YYYY-MM-DD'), 'Active', 5, TO_DATE('2021-07-21', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00002', 'Member_2', 'member2@example.com', '0167390426', TO_DATE('2022-10-28', 'YYYY-MM-DD'), TO_DATE('2025-10-27', 'YYYY-MM-DD'), 'Inactive', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00003', 'Member_3', 'member3@example.com', '0193945393', TO_DATE('2021-06-22', 'YYYY-MM-DD'), TO_DATE('2024-06-21', 'YYYY-MM-DD'), 'Inactive', 5, TO_DATE('2021-09-20', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00004', 'Member_4', 'member4@example.com', '0189194205', TO_DATE('2022-08-04', 'YYYY-MM-DD'), TO_DATE('2025-08-03', 'YYYY-MM-DD'), 'Inactive', 4, TO_DATE('2022-11-02', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00005', 'Member_5', 'member5@example.com', '0180327184', TO_DATE('2022-10-20', 'YYYY-MM-DD'), TO_DATE('2025-10-19', 'YYYY-MM-DD'), 'Active', 3, TO_DATE('2023-01-18', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00006', 'Member_6', 'member6@example.com', '0152192993', TO_DATE('2022-01-12', 'YYYY-MM-DD'), TO_DATE('2025-01-11', 'YYYY-MM-DD'), 'Active', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00007', 'Member_7', 'member7@example.com', '0195193718', TO_DATE('2022-04-12', 'YYYY-MM-DD'), TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Active', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00008', 'Member_8', 'member8@example.com', '0127521328', TO_DATE('2021-11-01', 'YYYY-MM-DD'), TO_DATE('2024-10-31', 'YYYY-MM-DD'), 'Active', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00009', 'Member_9', 'member9@example.com', '0128138995', TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'), 'Active', 3, TO_DATE('2022-04-01', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00010', 'Member_10', 'member10@example.com', '0172711347', TO_DATE('2022-07-05', 'YYYY-MM-DD'), TO_DATE('2025-07-04', 'YYYY-MM-DD'), 'Active', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00011', 'Member_11', 'member11@example.com', '0129604083', TO_DATE('2021-05-24', 'YYYY-MM-DD'), TO_DATE('2024-05-23', 'YYYY-MM-DD'), 'Inactive', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00012', 'Member_12', 'member12@example.com', '0147968636', TO_DATE('2022-02-15', 'YYYY-MM-DD'), TO_DATE('2025-02-14', 'YYYY-MM-DD'), 'Active', 3, TO_DATE('2022-05-16', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00013', 'Member_13', 'member13@example.com', '0194057338', TO_DATE('2021-07-12', 'YYYY-MM-DD'), TO_DATE('2024-07-11', 'YYYY-MM-DD'), 'Inactive', 5, TO_DATE('2021-10-10', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00014', 'Member_14', 'member14@example.com', '0178010827', TO_DATE('2022-11-28', 'YYYY-MM-DD'), TO_DATE('2025-11-27', 'YYYY-MM-DD'), 'Inactive', 4, TO_DATE('2023-02-26', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00015', 'Member_15', 'member15@example.com', '0193159480', TO_DATE('2021-04-06', 'YYYY-MM-DD'), TO_DATE('2024-04-05', 'YYYY-MM-DD'), 'Active', 4, TO_DATE('2021-07-05', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00016', 'Member_16', 'member16@example.com', '0163800905', TO_DATE('2022-08-25', 'YYYY-MM-DD'), TO_DATE('2025-08-24', 'YYYY-MM-DD'), 'Inactive', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00017', 'Member_17', 'member17@example.com', '0169507523', TO_DATE('2021-08-17', 'YYYY-MM-DD'), TO_DATE('2024-08-16', 'YYYY-MM-DD'), 'Inactive', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00018', 'Member_18', 'member18@example.com', '0125031486', TO_DATE('2022-04-11', 'YYYY-MM-DD'), TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00019', 'Member_19', 'member19@example.com', '0198499744', TO_DATE('2021-12-05', 'YYYY-MM-DD'), TO_DATE('2024-12-04', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00020', 'Member_20', 'member20@example.com', '0183015045', TO_DATE('2022-06-30', 'YYYY-MM-DD'), TO_DATE('2025-06-29', 'YYYY-MM-DD'), 'Active', 3, TO_DATE('2022-09-28', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00021', 'Member_21', 'member21@example.com', '0164888324', TO_DATE('2021-07-10', 'YYYY-MM-DD'), TO_DATE('2024-07-09', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00022', 'Member_22', 'member22@example.com', '0178352520', TO_DATE('2022-06-25', 'YYYY-MM-DD'), TO_DATE('2025-06-24', 'YYYY-MM-DD'), 'Inactive', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00023', 'Member_23', 'member23@example.com', '0139263619', TO_DATE('2022-06-08', 'YYYY-MM-DD'), TO_DATE('2025-06-07', 'YYYY-MM-DD'), 'Inactive', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00024', 'Member_24', 'member24@example.com', '0124433558', TO_DATE('2022-03-17', 'YYYY-MM-DD'), TO_DATE('2025-03-16', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00025', 'Member_25', 'member25@example.com', '0186670830', TO_DATE('2022-09-15', 'YYYY-MM-DD'), TO_DATE('2025-09-14', 'YYYY-MM-DD'), 'Active', 5, TO_DATE('2022-12-14', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00026', 'Member_26', 'member26@example.com', '0165784498', TO_DATE('2021-01-09', 'YYYY-MM-DD'), TO_DATE('2024-01-09', 'YYYY-MM-DD'), 'Inactive', 3, TO_DATE('2021-04-09', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00027', 'Member_27', 'member27@example.com', '0118254897', TO_DATE('2022-11-03', 'YYYY-MM-DD'), TO_DATE('2025-11-02', 'YYYY-MM-DD'), 'Active', 5, TO_DATE('2023-02-01', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00028', 'Member_28', 'member28@example.com', '0193627787', TO_DATE('2021-05-06', 'YYYY-MM-DD'), TO_DATE('2024-05-05', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00029', 'Member_29', 'member29@example.com', '0111714036', TO_DATE('2021-06-23', 'YYYY-MM-DD'), TO_DATE('2024-06-22', 'YYYY-MM-DD'), 'Inactive', 3, TO_DATE('2021-09-21', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00030', 'Member_30', 'member30@example.com', '0187416813', TO_DATE('2021-09-25', 'YYYY-MM-DD'), TO_DATE('2024-09-24', 'YYYY-MM-DD'), 'Inactive', 4, TO_DATE('2021-12-24', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00031', 'Member_31', 'member31@example.com', '0197008390', TO_DATE('2021-12-15', 'YYYY-MM-DD'), TO_DATE('2024-12-14', 'YYYY-MM-DD'), 'Inactive', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00032', 'Member_32', 'member32@example.com', '0169620698', TO_DATE('2022-10-05', 'YYYY-MM-DD'), TO_DATE('2025-10-04', 'YYYY-MM-DD'), 'Inactive', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00033', 'Member_33', 'member33@example.com', '0172540300', TO_DATE('2021-08-14', 'YYYY-MM-DD'), TO_DATE('2024-08-13', 'YYYY-MM-DD'), 'Inactive', 4, TO_DATE('2021-11-12', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00034', 'Member_34', 'member34@example.com', '0188421914', TO_DATE('2021-08-16', 'YYYY-MM-DD'), TO_DATE('2024-08-15', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00035', 'Member_35', 'member35@example.com', '0191958677', TO_DATE('2021-08-12', 'YYYY-MM-DD'), TO_DATE('2024-08-11', 'YYYY-MM-DD'), 'Inactive', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00036', 'Member_36', 'member36@example.com', '0197132529', TO_DATE('2021-11-30', 'YYYY-MM-DD'), TO_DATE('2024-11-29', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00037', 'Member_37', 'member37@example.com', '0145912951', TO_DATE('2022-02-27', 'YYYY-MM-DD'), TO_DATE('2025-02-26', 'YYYY-MM-DD'), 'Inactive', 4, TO_DATE('2022-05-28', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00038', 'Member_38', 'member38@example.com', '0156269763', TO_DATE('2021-11-19', 'YYYY-MM-DD'), TO_DATE('2024-11-18', 'YYYY-MM-DD'), 'Active', 3, TO_DATE('2022-02-17', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00039', 'Member_39', 'member39@example.com', '0120700973', TO_DATE('2021-05-11', 'YYYY-MM-DD'), TO_DATE('2024-05-10', 'YYYY-MM-DD'), 'Active', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00040', 'Member_40', 'member40@example.com', '0171259676', TO_DATE('2021-04-20', 'YYYY-MM-DD'), TO_DATE('2024-04-19', 'YYYY-MM-DD'), 'Inactive', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00041', 'Member_41', 'member41@example.com', '0193177738', TO_DATE('2021-07-24', 'YYYY-MM-DD'), TO_DATE('2024-07-23', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00042', 'Member_42', 'member42@example.com', '0153536689', TO_DATE('2022-03-12', 'YYYY-MM-DD'), TO_DATE('2025-03-11', 'YYYY-MM-DD'), 'Inactive', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00043', 'Member_43', 'member43@example.com', '0150368459', TO_DATE('2021-09-30', 'YYYY-MM-DD'), TO_DATE('2024-09-29', 'YYYY-MM-DD'), 'Inactive', 5, TO_DATE('2021-12-29', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00044', 'Member_44', 'member44@example.com', '0185958639', TO_DATE('2022-08-26', 'YYYY-MM-DD'), TO_DATE('2025-08-25', 'YYYY-MM-DD'), 'Active', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00045', 'Member_45', 'member45@example.com', '0167997263', TO_DATE('2021-05-04', 'YYYY-MM-DD'), TO_DATE('2024-05-03', 'YYYY-MM-DD'), 'Active', 1, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00046', 'Member_46', 'member46@example.com', '0164577400', TO_DATE('2021-08-29', 'YYYY-MM-DD'), TO_DATE('2024-08-28', 'YYYY-MM-DD'), 'Active', 4, TO_DATE('2021-11-27', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00047', 'Member_47', 'member47@example.com', '0187125510', TO_DATE('2021-10-16', 'YYYY-MM-DD'), TO_DATE('2024-10-15', 'YYYY-MM-DD'), 'Active', 0, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00048', 'Member_48', 'member48@example.com', '0195247502', TO_DATE('2021-04-06', 'YYYY-MM-DD'), TO_DATE('2024-04-05', 'YYYY-MM-DD'), 'Inactive', 3, TO_DATE('2021-07-05', 'YYYY-MM-DD'));
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00049', 'Member_49', 'member49@example.com', '0136051970', TO_DATE('2022-11-29', 'YYYY-MM-DD'), TO_DATE('2025-11-28', 'YYYY-MM-DD'), 'Active', 2, NULL);
-
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00050', 'Member_50', 'member50@example.com', '0172119414', TO_DATE('2022-08-04', 'YYYY-MM-DD'), TO_DATE('2025-08-03', 'YYYY-MM-DD'), 'Inactive', 3, TO_DATE('2022-11-02', 'YYYY-MM-DD'));
 
 
@@ -415,21 +366,21 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00001', NULL, '978374945611267', 'BC00032', TO_DATE('2025-03-10', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978399319494707', 'BC00020', TO_DATE('2024-02-02', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978118598993540', 'BC00002', TO_DATE('2024-02-28', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978802533807786', 'BC00099', TO_DATE('2024-06-09', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', TO_DATE('2024-06-21', 'YYYY-MM-DD'), '978960126264520', 'BC00011', TO_DATE('2024-06-20', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978106967995749', 'BC00042', TO_DATE('2024-07-10', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978647894640884', 'BC00089', TO_DATE('2024-09-14', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', TO_DATE('2024-09-29', 'YYYY-MM-DD'), '978967503790845', 'BC00077', TO_DATE('2024-09-28', 'YYYY-MM-DD'), 'Ready for Pickup');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978653049967802', 'BC00036', TO_DATE('2024-09-28', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978527703449123', 'BC00037', TO_DATE('2024-11-29', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978281281973001', 'BC00083', TO_DATE('2025-01-12', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978647894640884', 'BC00089', TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978653049967802', 'BC00036', TO_DATE('2025-04-28', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978527703449123', 'BC00037', TO_DATE('2025-04-29', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978281281973001', 'BC00083', TO_DATE('2025-05-12', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978414191980380', 'BC00100', TO_DATE('2025-02-15', 'YYYY-MM-DD'), 'Pending');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', NULL, '978802533807786', 'BC00099', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00002', TO_DATE('2025-04-29', 'YYYY-MM-DD'), '978967503790845', 'BC00077', TO_DATE('2024-09-28', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', TO_DATE('2024-02-20', 'YYYY-MM-DD'), '978389148186586', 'BC00020', TO_DATE('2024-02-19', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', TO_DATE('2024-03-18', 'YYYY-MM-DD'), '978414191980380', 'BC00005', TO_DATE('2024-03-17', 'YYYY-MM-DD'), 'Ready for Pickup');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', NULL, '978802533807786', 'BC00059', TO_DATE('2024-04-09', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', NULL, '978209939785296', 'BC00004', TO_DATE('2024-06-02', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', NULL, '978802533807786', 'BC00059', TO_DATE('2025-05-09', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', NULL, '978209939785296', 'BC00004', TO_DATE('2025-05-02', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00003', NULL, '978196740169139', 'BC00055', TO_DATE('2024-06-15', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00004', NULL, '978374945611267', 'BC00038', TO_DATE('2024-02-16', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00004', NULL, '978374945611267', 'BC00038', TO_DATE('2025-05-16', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00004', NULL, '978413383564627', 'BC00036', TO_DATE('2024-02-18', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00004', NULL, '978396733209342', 'BC00099', TO_DATE('2024-05-17', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00004', NULL, '978420057966693', 'BC00079', TO_DATE('2024-06-16', 'YYYY-MM-DD'), 'Collected');
@@ -441,13 +392,13 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00005', NULL, '978834650104565', 'BC00047', TO_DATE('2024-08-20', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00005', NULL, '978430224098240', 'BC00088', TO_DATE('2024-09-11', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00005', NULL, '978422163244009', 'BC00039', TO_DATE('2025-02-28', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978344477681286', 'BC00018', TO_DATE('2024-01-02', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978344477681286', 'BC00018', TO_DATE('2025-05-02', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978834650104565', 'BC00058', TO_DATE('2024-03-01', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978210701261571', 'BC00093', TO_DATE('2024-03-02', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978431022003932', 'BC00075', TO_DATE('2024-06-21', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978967503790845', 'BC00037', TO_DATE('2024-11-19', 'YYYY-MM-DD'), 'Pending');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978967503790845', 'BC00037', TO_DATE('2025-05-07', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978420057966693', 'BC00075', TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978860405874562', 'BC00074', TO_DATE('2025-01-20', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00006', NULL, '978860405874562', 'BC00074', TO_DATE('2025-05-09', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00007', NULL, '978430224098240', 'BC00064', TO_DATE('2024-01-01', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00007', NULL, '978389148186586', 'BC00021', TO_DATE('2024-01-01', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00007', NULL, '978160167712882', 'BC00020', TO_DATE('2024-01-01', 'YYYY-MM-DD'), 'Expired');
@@ -600,10 +551,10 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978770200228980', 'BC00066', TO_DATE('2024-08-13', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978160167712882', 'BC00086', TO_DATE('2024-09-14', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978802533807786', 'BC00080', TO_DATE('2024-10-05', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', TO_DATE('2024-10-13', 'YYYY-MM-DD'), '978125089731809', 'BC00013', TO_DATE('2024-10-12', 'YYYY-MM-DD'), 'Ready for Pickup');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978300126240007', 'BC00029', TO_DATE('2024-10-14', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978756814510443', 'BC00080', TO_DATE('2025-01-27', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', TO_DATE('2025-03-24', 'YYYY-MM-DD'), '978967503790845', 'BC00045', TO_DATE('2025-03-23', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978300126240007', 'BC00029', TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', TO_DATE('2025-04-13', 'YYYY-MM-DD'), '978125089731809', 'BC00013', TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', TO_DATE('2025-04-24', 'YYYY-MM-DD'), '978967503790845', 'BC00045', TO_DATE('2025-04-23', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00033', NULL, '978756814510443', 'BC00080', TO_DATE('2025-04-27', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00034', TO_DATE('2024-05-12', 'YYYY-MM-DD'), '978669394297950', 'BC00052', TO_DATE('2024-05-11', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00034', NULL, '978802533807786', 'BC00033', TO_DATE('2024-09-15', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00034', NULL, '978565523649203', 'BC00054', TO_DATE('2024-10-06', 'YYYY-MM-DD'), 'Pending');
@@ -638,13 +589,13 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', TO_DATE('2024-03-29', 'YYYY-MM-DD'), '978125089731809', 'BC00056', TO_DATE('2024-03-28', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', TO_DATE('2024-05-06', 'YYYY-MM-DD'), '978374945611267', 'BC00076', TO_DATE('2024-05-05', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978918486085683', 'BC00010', TO_DATE('2024-05-29', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978300126240007', 'BC00069', TO_DATE('2024-07-08', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978649100501508', 'BC00034', TO_DATE('2024-11-25', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978300126240007', 'BC00069', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978240461922119', 'BC00084', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', NULL, '978649100501508', 'BC00034', TO_DATE('2025-04-25', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00040', NULL, '978918486085683', 'BC00005', TO_DATE('2024-03-30', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00040', NULL, '978949147054427', 'BC00093', TO_DATE('2024-07-06', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00040', NULL, '978344477681286', 'BC00016', TO_DATE('2025-02-27', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00040', NULL, '978669394297950', 'BC00049', TO_DATE('2025-03-02', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00040', NULL, '978669394297950', 'BC00049', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00041', NULL, '978399319494707', 'BC00088', TO_DATE('2024-01-20', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00041', TO_DATE('2024-01-31', 'YYYY-MM-DD'), '978949147054427', 'BC00073', TO_DATE('2024-01-30', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00041', NULL, '978834650104565', 'BC00092', TO_DATE('2024-05-19', 'YYYY-MM-DD'), 'Collected');
@@ -668,11 +619,11 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00043', TO_DATE('2024-09-04', 'YYYY-MM-DD'), '978125089731809', 'BC00100', TO_DATE('2024-09-03', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00043', TO_DATE('2024-09-18', 'YYYY-MM-DD'), '978399319494707', 'BC00036', TO_DATE('2024-09-17', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978300126240007', 'BC00031', TO_DATE('2024-01-15', 'YYYY-MM-DD'), 'Expired');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978307818239731', 'BC00095', TO_DATE('2024-01-20', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', TO_DATE('2024-02-28', 'YYYY-MM-DD'), '978649100501508', 'BC00076', TO_DATE('2024-02-27', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978307818239731', 'BC00095', TO_DATE('2025-04-20', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', TO_DATE('2024-06-24', 'YYYY-MM-DD'), '978960126264520', 'BC00083', TO_DATE('2024-06-23', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978582818734182', 'BC00095', TO_DATE('2024-09-13', 'YYYY-MM-DD'), 'Pending');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978263701729101', 'BC00053', TO_DATE('2025-02-21', 'YYYY-MM-DD'), 'Pending');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978263701729101', 'BC00053', TO_DATE('2025-04-21', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978196740169139', 'BC00027', TO_DATE('2025-03-24', 'YYYY-MM-DD'), 'Pending');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00044', NULL, '978414191980380', 'BC00084', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00045', NULL, '978422163244009', 'BC00027', TO_DATE('2024-10-12', 'YYYY-MM-DD'), 'Collected');
@@ -687,7 +638,7 @@ INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, Reserva
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00046', TO_DATE('2025-02-12', 'YYYY-MM-DD'), '978647894640884', 'BC00034', TO_DATE('2025-02-11', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00046', NULL, '978669394297950', 'BC00054', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00046', NULL, '978802533807786', 'BC00054', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Collected');
-INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00046', NULL, '978860405874562', 'BC00089', TO_DATE('2025-04-18', 'YYYY-MM-DD'), 'Expired');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00046', NULL, '978860405874562', 'BC00089', TO_DATE('2025-04-18', 'YYYY-MM-DD'), 'Collected');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00047', TO_DATE('2024-06-19', 'YYYY-MM-DD'), '978108081334896', 'BC00074', TO_DATE('2024-06-18', 'YYYY-MM-DD'), 'Ready for Pickup');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00047', NULL, '978307818239731', 'BC00091', TO_DATE('2024-09-07', 'YYYY-MM-DD'), 'Expired');
 INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00047', NULL, '978653049967802', 'BC00087', TO_DATE('2024-10-25', 'YYYY-MM-DD'), 'Collected');
