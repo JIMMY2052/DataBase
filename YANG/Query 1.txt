@@ -1,7 +1,4 @@
 CREATE OR REPLACE VIEW check_overdue_unpaid_fines AS
-
-SET LINESIZE 220;
-
 SELECT 
     f.FineID AS Fine_ID,
     m.Name AS Member_Name,
