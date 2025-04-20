@@ -1,0 +1,32 @@
+SET PAGESIZE 1000;
+SET LINESIZE 500;
+
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM';
+
+BREAK ON BorrowMonth SKIP 1
+COMPUTE SUM LABEL 'Total' OF BorrowCount ON BorrowMonth
+
+COLUMN BorrowMonth FORMAT A15 HEADING 'Borrow Month';
+COLUMN GenreName FORMAT A25 HEADING 'Genre';
+COLUMN BorrowCount FORMAT 9999 HEADING 'Books Borrowed';
+
+TTITLE 'Monthly Trend of Books Borrowed by Genre in the Current Year'
+
+SELECT 
+    TO_CHAR(bb.BorrowDate) AS BorrowMonth,
+    g.GenreName AS Genre,
+    COUNT(*) AS BorrowCount
+FROM 
+    BorrowBook bb
+JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+JOIN Book b ON bc.ISBN = b.ISBN
+JOIN BookGenre bg ON b.ISBN = bg.ISBN
+JOIN Genre g ON bg.GenreID = g.GenreID
+WHERE 
+    TO_CHAR(bb.BorrowDate, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY')
+GROUP BY 
+    TO_CHAR(bb.BorrowDate),
+    g.GenreName
+ORDER BY 
+    BorrowMonth,
+    BorrowCount DESC;

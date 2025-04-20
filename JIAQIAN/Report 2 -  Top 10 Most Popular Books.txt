@@ -1,0 +1,44 @@
+SET SERVEROUTPUT ON;
+SET PAGESIZE 1000;
+SET LINESIZE 500;
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
+
+DECLARE
+    CURSOR c_top_books IS
+        SELECT * FROM (
+            SELECT 
+                b.Title,
+                g.GenreName,
+                COUNT(bb.BorrowBookID) AS BorrowCount
+            FROM 
+                BorrowBook bb
+            JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+            JOIN Book b ON bc.ISBN = b.ISBN
+            JOIN BookGenre bg ON b.ISBN = bg.ISBN
+            JOIN Genre g ON bg.GenreID = g.GenreID
+            WHERE 
+                bb.BorrowDate >= ADD_MONTHS(SYSDATE, -36)  -- Last 3 years
+            GROUP BY 
+                b.Title, g.GenreName
+            ORDER BY 
+                COUNT(bb.BorrowBookID) DESC
+        ) WHERE ROWNUM <= 10;
+
+    v_rank NUMBER := 1;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+    DBMS_OUTPUT.PUT_LINE(LPAD('+_+ Top 10 Most Popular Books (Last 3 Years) +_+', 70));
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('Rank', 6) || RPAD('Book Title', 50) || RPAD('Genre', 25) || RPAD('Times Borrowed', 20));
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 6) || RPAD('-', 50, '-') || RPAD('-', 25, '-') || RPAD('-', 20, '-'));
+
+    FOR rec IN c_top_books LOOP
+        DBMS_OUTPUT.PUT_LINE(RPAD(v_rank, 6) || RPAD(rec.Title, 50) || RPAD(rec.GenreName, 25) || RPAD(rec.BorrowCount, 20));
+        v_rank := v_rank + 1;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+END;
+/

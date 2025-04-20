@@ -1,0 +1,68 @@
+CREATE OR REPLACE PROCEDURE TrackBorrowingHistory (
+    p_ISBN IN Book.ISBN%TYPE
+) AS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Borrowing History for Book ISBN: ' || p_ISBN);
+
+    -- Print column headers
+    DBMS_OUTPUT.PUT_LINE(
+        RPAD('Member ID', 12) || 
+        RPAD('BookCopyID', 15) || 
+        RPAD('Borrow Date', 15) || 
+        RPAD('Due Date', 15) || 
+        RPAD('Return Date', 15) || 
+        RPAD('Status', 10)
+    );
+
+    -- Print separator line
+    DBMS_OUTPUT.PUT_LINE(
+        RPAD('-', 12, '-') || 
+        RPAD('-', 15, '-') || 
+        RPAD('-', 15, '-') || 
+        RPAD('-', 15, '-') || 
+        RPAD('-', 15, '-') || 
+        RPAD('-', 10, '-')
+    );
+
+    -- Loop through result set
+    FOR rec IN (
+        SELECT 
+            bb.MemberID,
+            bb.BookCopyID,
+            TO_CHAR(bb.BorrowDate, 'YYYY-MM-DD') AS BorrowDate,
+            TO_CHAR(bb.DueDate, 'YYYY-MM-DD') AS DueDate,
+            TO_CHAR(rb.ReturnDate, 'YYYY-MM-DD') AS ReturnDate,
+            rb.ReturnStatus
+        FROM 
+            BookCopy bc
+        JOIN 
+            BorrowBook bb ON bc.BookCopyID = bb.BookCopyID
+        LEFT JOIN 
+            ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
+        WHERE 
+            bc.ISBN = p_ISBN
+            AND bb.BorrowDate >= ADD_MONTHS(SYSDATE, -6)
+        ORDER BY 
+            bb.BorrowDate DESC
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            RPAD(rec.MemberID, 12) || 
+            RPAD(rec.BookCopyID, 15) || 
+            RPAD(rec.BorrowDate, 15) || 
+            RPAD(rec.DueDate, 15) || 
+            RPAD(NVL(rec.ReturnDate, '-'), 15) || 
+            RPAD(NVL(rec.ReturnStatus, 'Pending'), 10)
+        );
+    END LOOP;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+
+
+
+-- run the Program
+SET SERVEROUTPUT ON;
+EXEC TrackBorrowingHistory('978281281973001');

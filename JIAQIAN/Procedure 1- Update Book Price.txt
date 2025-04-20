@@ -1,0 +1,37 @@
+CREATE OR REPLACE PROCEDURE UpdateBookPrice (
+    p_ISBN        IN Book.ISBN%TYPE,
+    p_NewPrice    IN Book.Price%TYPE
+) AS
+    v_count INTEGER;
+BEGIN
+    -- Check if the book exists
+    SELECT COUNT(*) INTO v_count
+    FROM Book
+    WHERE ISBN = p_ISBN;
+
+    IF v_count = 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Book with given ISBN does not exist.');
+    END IF;
+
+    -- Update the book price
+    UPDATE Book
+    SET Price = p_NewPrice
+    WHERE ISBN = p_ISBN;
+
+    DBMS_OUTPUT.PUT_LINE('Book price updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+
+
+
+-- Run Program 
+SET SERVEROUTPUT ON;
+
+BEGIN
+    UpdateBookPrice('978802533807786',50);
+END;
+/

@@ -1,0 +1,28 @@
+CREATE OR REPLACE TRIGGER TRG_UpdateBookAvail
+AFTER INSERT ON ReturnBook
+FOR EACH ROW
+DECLARE
+    v_BookCopyID BookCopy.BookCopyID%TYPE;
+BEGIN
+    -- Get the BookCopyID from BorrowBook
+    SELECT BookCopyID INTO v_BookCopyID
+    FROM BorrowBook
+    WHERE BorrowBookID = :NEW.BorrowBookID;
+
+    -- Update the BookCopy to set it as available
+    UPDATE BookCopy
+    SET IsAvailable = 'Y'
+    WHERE BookCopyID = v_BookCopyID;
+END;
+/
+
+
+
+
+-- how to Program
+Select * from bookcopy where Bookcopyid = 'BC00081';
+
+
+INSERT INTO ReturnBook (ReturnBookID, BorrowBookID, ReturnStatus, ReturnDate) VALUES ('RB00200', 'BB00120', 'On Time', TO_DATE('2025-11-12', 'YYYY-MM-DD'));
+
+Select * from bookcopy where Bookcopyid = 'BC00081';

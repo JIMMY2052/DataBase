@@ -1,0 +1,117 @@
+SET SERVEROUTPUT ON;
+SET PAGESIZE 1000;
+SET LINESIZE 500;
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
+
+DECLARE
+    CURSOR c_members IS
+        SELECT DISTINCT m.MemberID, m.Name
+        FROM Member m
+        JOIN BorrowBook bb ON m.MemberID = bb.MemberID
+        WHERE bb.BorrowDate BETWEEN TO_DATE('2025-01-01', 'YYYY-MM-DD') AND TO_DATE('2025-06-30', 'YYYY-MM-DD');
+
+    CURSOR c_borrowed_books(p_member_id Member.MemberID%TYPE) IS
+        SELECT 
+            b.Title AS BookTitle,
+            bb.BorrowDate,
+            rb.ReturnDate,
+            rb.ReturnStatus
+        FROM BorrowBook bb
+        JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+        JOIN Book b ON bc.ISBN = b.ISBN
+        LEFT JOIN ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
+        WHERE bb.MemberID = p_member_id
+          AND bb.BorrowDate BETWEEN TO_DATE('2025-01-01', 'YYYY-MM-DD') AND TO_DATE('2025-06-30', 'YYYY-MM-DD')
+        ORDER BY bb.BorrowDate;
+
+    -- Per member counters
+    v_total INTEGER;
+    v_ontime INTEGER;
+    v_late INTEGER;
+    v_pending INTEGER;
+    v_lost INTEGER;
+
+    -- Grand totals
+    g_total INTEGER := 0;
+    g_ontime INTEGER := 0;
+    g_late INTEGER := 0;
+    g_pending INTEGER := 0;
+    g_lost INTEGER := 0;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+    DBMS_OUTPUT.PUT_LINE(LPAD('Borrowing History Report (2025-01-01 to 2025-06-30)', 65));
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+
+    FOR member_rec IN c_members LOOP
+        v_total := 0;
+        v_ontime := 0;
+        v_late := 0;
+        v_pending := 0;
+        v_lost := 0;
+
+        DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+        DBMS_OUTPUT.PUT_LINE('>> Member ID  : ' || member_rec.MemberID);
+        DBMS_OUTPUT.PUT_LINE('>> Member Name: ' || member_rec.Name);
+        DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+
+        DBMS_OUTPUT.PUT_LINE(RPAD('   Book Title', 35) ||
+                             RPAD('Borrow Date', 15) ||
+                             RPAD('Return Date', 15) ||
+                             RPAD('Status', 10));
+        DBMS_OUTPUT.PUT_LINE(RPAD('   ----------', 35) ||
+                             RPAD('------------', 15) ||
+                             RPAD('------------', 15) ||
+                             RPAD('-------', 10));
+
+        FOR book_rec IN c_borrowed_books(member_rec.MemberID) LOOP
+            v_total := v_total + 1;
+
+            IF book_rec.ReturnStatus = 'On Time' THEN
+                v_ontime := v_ontime + 1;
+            ELSIF book_rec.ReturnStatus = 'Late' THEN
+                v_late := v_late + 1;
+            ELSIF book_rec.ReturnStatus = 'Lost' THEN
+                v_lost := v_lost + 1;
+            ELSE
+                v_pending := v_pending + 1;
+            END IF;
+
+            DBMS_OUTPUT.PUT_LINE(RPAD('   ' || book_rec.BookTitle, 35) ||
+                                 RPAD(TO_CHAR(book_rec.BorrowDate, 'YYYY-MM-DD'), 15) ||
+                                 RPAD(NVL(TO_CHAR(book_rec.ReturnDate, 'YYYY-MM-DD'), 'Not Returned'), 15) ||
+                                 RPAD(NVL(book_rec.ReturnStatus, 'Pending'), 10));
+        END LOOP;
+
+        -- Show per-member summary
+        DBMS_OUTPUT.PUT_LINE('');
+        DBMS_OUTPUT.PUT_LINE('   >> Summary:');
+        DBMS_OUTPUT.PUT_LINE('      Total Borrowed : ' || v_total);
+        DBMS_OUTPUT.PUT_LINE('      On Time        : ' || v_ontime);
+        DBMS_OUTPUT.PUT_LINE('      Late           : ' || v_late);
+        DBMS_OUTPUT.PUT_LINE('      Lost           : ' || v_lost);
+        DBMS_OUTPUT.PUT_LINE('      Pending        : ' || v_pending);
+        DBMS_OUTPUT.PUT_LINE(RPAD('=', 100, '='));
+        DBMS_OUTPUT.PUT_LINE('');
+
+        -- Add to grand totals
+        g_total := g_total + v_total;
+        g_ontime := g_ontime + v_ontime;
+        g_late := g_late + v_late;
+        g_lost := g_lost + v_lost;
+        g_pending := g_pending + v_pending;
+    END LOOP;
+
+    -- Final Grand Totals
+    DBMS_OUTPUT.PUT_LINE(RPAD('*', 100, '*'));
+    DBMS_OUTPUT.PUT_LINE(LPAD(' -_- FINAL GRAND TOTAL -_-', 60));
+    DBMS_OUTPUT.PUT_LINE(RPAD('*', 100, '*'));
+    DBMS_OUTPUT.PUT_LINE('   Total Borrowed : ' || g_total);
+    DBMS_OUTPUT.PUT_LINE('   On Time        : ' || g_ontime);
+    DBMS_OUTPUT.PUT_LINE('   Late           : ' || g_late);
+    DBMS_OUTPUT.PUT_LINE('   Lost           : ' || g_lost);
+    DBMS_OUTPUT.PUT_LINE('   Pending        : ' || g_pending);
+    DBMS_OUTPUT.PUT_LINE(RPAD('*', 100, '*'));
+
+END;
+/

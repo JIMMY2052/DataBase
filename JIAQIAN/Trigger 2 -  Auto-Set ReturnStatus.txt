@@ -1,0 +1,41 @@
+CREATE OR REPLACE TRIGGER trg_auto_set_return_status
+BEFORE INSERT OR UPDATE ON ReturnBook
+FOR EACH ROW
+DECLARE
+    v_borrow_date DATE;
+BEGIN
+    IF :NEW.ReturnStatus IS NULL THEN
+        -- Get the BorrowDate from BorrowBook
+        SELECT BorrowDate INTO v_borrow_date
+        FROM BorrowBook
+        WHERE BorrowBookID = :NEW.BorrowBookID;
+
+        -- Compare only the date part (ignore time)
+        IF TRUNC(:NEW.ReturnDate) <= TRUNC(v_borrow_date) + 7 THEN
+            :NEW.ReturnStatus := 'On Time';
+        ELSE
+            :NEW.ReturnStatus := 'Late';
+        END IF;
+    END IF;
+END;
+/
+
+
+
+-- run the Program
+SELECT 
+    BorrowBookID,
+    MemberID,
+    BookCopyID,
+    TO_CHAR(BorrowDate, 'YYYY-MM-DD') AS BorrowDate,
+    TO_CHAR(DueDate, 'YYYY-MM-DD') AS DueDate
+FROM BorrowBook
+WHERE BorrowBookID = 'BB00292';
+
+
+INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00201', 'BB00292',  TO_DATE('2025-01-30', 'YYYY-MM-DD'));
+
+INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00202', 'BB00292', TO_DATE('2025-01-31', 'YYYY-MM-DD'));
+
+SELECT * FROM ReturnBook
+WHERE ReturnBookID IN ('RB00201', 'RB00202');

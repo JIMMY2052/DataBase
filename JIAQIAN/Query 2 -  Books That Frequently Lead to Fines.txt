@@ -1,0 +1,32 @@
+SET PAGESIZE 1000;
+SET LINESIZE 500;
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM';
+
+COLUMN ISBN FORMAT A15 HEADING 'ISBN'
+COLUMN Title FORMAT A40 HEADING 'Book Title'
+COLUMN PublicationYear FORMAT 9999 HEADING 'Year'
+COLUMN TotalFines FORMAT 999 HEADING 'No. of Fines'
+
+TTITLE CENTER 'Top 10 Books That Frequently Lead to Fines' SKIP 2
+
+SELECT *
+FROM (
+    SELECT 
+        b.ISBN,
+        b.Title,
+        b.PublicationYear,
+        COUNT(f.FineID) AS TotalFines
+    FROM 
+        Book b
+    JOIN 
+        BookCopy bc ON b.ISBN = bc.ISBN
+    JOIN 
+        BorrowBook bb ON bc.BookCopyID = bb.BookCopyID
+    JOIN 
+        Fine f ON bb.BorrowBookID = f.BorrowBookID
+    GROUP BY 
+        b.ISBN, b.Title, b.PublicationYear
+    ORDER BY 
+        COUNT(f.FineID) DESC
+)
+WHERE ROWNUM <= 10;
