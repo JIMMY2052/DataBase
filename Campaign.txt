@@ -133,7 +133,7 @@ INSERT INTO Campaign (
     ApprovalStatus, ApprovedByStaffID, ApprovalDate
 )
 VALUES (
-    'CMP00010', 'STF00005', 'Children’s Book Month', 'Achievement', 'Read children books for rewards',
+    'CMP00010', 'STF00005', 'Childrens Book Month', 'Achievement', 'Read children books for rewards',
     TO_DATE('2025-04-01', 'YYYY-MM-DD'), TO_DATE('2025-04-30', 'YYYY-MM-DD'),
     'Borrow 3 Children books in a month', 15.00,
     'Pending', NULL, NULL
