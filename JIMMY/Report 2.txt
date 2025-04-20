@@ -1,0 +1,46 @@
+CREATE OR REPLACE PROCEDURE Report_Top_Reservation_Member(input_year NUMBER， top_n NUMBER)
+IS
+  
+  CURSOR top_member_cursor IS
+    SELECT *
+    FROM (
+      SELECT M.MemberID, M.Name, COUNT(*) AS TotalReservations
+      FROM Member M
+      JOIN Reservation R ON M.MemberID = R.MemberID
+      WHERE EXTRACT(YEAR FROM R.ReservationDate) = input_year
+      GROUP BY M.MemberID, M.Name
+      ORDER BY TotalReservations DESC
+    )
+    WHERE ROWNUM <= top_n;
+
+
+  CURSOR member_reservation_cursor(p_memberID Member.MemberID%TYPE) IS
+    SELECT R.ISBN, B.Title, R.ReservationDate, R.Status
+    FROM Reservation R
+    JOIN Book B ON R.ISBN = B.ISBN
+    WHERE R.MemberID = p_memberID
+      AND EXTRACT(YEAR FROM R.ReservationDate) = input_year 
+    ORDER BY R.ReservationDate;
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Top ' || top_n ||' Members by Reservations for Year ' || input_year);
+  DBMS_OUTPUT.PUT_LINE(RPAD('=', 85, '='));
+
+  FOR mem_rec IN top_member_cursor LOOP
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || 'Member: ' || mem_rec.MemberID || ' - ' || mem_rec.Name);
+    DBMS_OUTPUT.PUT_LINE('Total Reservations: ' || mem_rec.TotalReservations);
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 85, '-'));
+    DBMS_OUTPUT.PUT_LINE(RPAD('Book Title', 45) || ' | Date        | Status');
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 85, '-'));
+
+    FOR rsv_rec IN member_reservation_cursor(mem_rec.MemberID) LOOP
+      DBMS_OUTPUT.PUT_LINE(
+        RPAD(rsv_rec.Title, 45) || ' | ' ||
+        TO_CHAR(rsv_rec.ReservationDate, 'DD-MM-YYYY') || ' | ' ||
+        RPAD(rsv_rec.Status, 10)
+      );
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 85, '='));
+  END LOOP;
+END;
+/

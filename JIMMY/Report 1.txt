@@ -1,0 +1,95 @@
+CREATE OR REPLACE PROCEDURE SemesterSumaryReport(inputyear NUMBER)
+IS
+  v_reader_count NUMBER := 0;
+  v_reservation_count NUMBER := 0;
+  v_borrow_count NUMBER := 0;
+
+  v_total_readers NUMBER := 0;
+  v_total_reservations NUMBER := 0;
+  v_total_borrowed NUMBER := 0;
+
+CURSOR semester_cursor IS
+    SELECT 1 AS semester FROM dual
+    UNION ALL
+    SELECT 2 FROM dual
+    UNION ALL
+    SELECT 3 FROM dual;
+
+CURSOR reader_cursor(sem NUMBER) IS
+    SELECT COUNT(DISTINCT BB.MemberID) AS total_readers
+    FROM BorrowBook BB
+    WHERE EXTRACT(YEAR FROM BB.BorrowDate) = inputyear
+    AND 
+ ((sem = 1 AND EXTRACT(MONTH FROM BB.BorrowDate) BETWEEN 1 AND 5)
+    OR
+ (sem = 2 AND EXTRACT(MONTH FROM BB.BorrowDate) BETWEEN 6 AND 9)
+    OR
+ (sem = 3 AND EXTRACT(MONTH FROM BB.BorrowDate) BETWEEN 10 AND 12));
+
+CURSOR reservation_cursor(sem NUMBER) IS
+    SELECT COUNT(*) AS total_reservations
+    FROM Reservation
+    WHERE EXTRACT(YEAR FROM ReservationDate) = inputyear
+    AND
+((sem = 1 AND EXTRACT(MONTH FROM ReservationDate) BETWEEN 1 AND 5)
+    OR
+(sem = 2 AND EXTRACT(MONTH FROM ReservationDate) BETWEEN 6 AND 9)
+    OR
+(sem = 3 AND EXTRACT(MONTH FROM ReservationDate) BETWEEN 10 AND 12));
+
+CURSOR borrow_cursor(sem NUMBER) IS
+    SELECT COUNT(*) AS total_borrowed
+    FROM BorrowBook
+    WHERE EXTRACT(YEAR FROM BorrowDate) = inputyear
+    
+
+AND 
+((sem = 1 AND EXTRACT(MONTH FROM BorrowDate) BETWEEN 1 AND 5) 
+OR
+(sem = 2 AND EXTRACT(MONTH FROM BorrowDate) BETWEEN 6 AND 9) 
+OR
+(sem = 3 AND EXTRACT(MONTH FROM BorrowDate) BETWEEN 10 AND 12));
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE(RPAD('Total Number of Readers, Reservation And Borrows Summary for Year ' || inputyear, 70, ' '));
+  DBMS_OUTPUT.PUT_LINE(RPAD('=', 70, '='));
+
+  FOR sem IN semester_cursor LOOP
+    v_reader_count := 0;
+    v_reservation_count := 0;
+    v_borrow_count := 0;
+
+    FOR r IN reader_cursor(sem .semester) LOOP
+      v_reader_count := r.total_readers;
+    END LOOP;
+
+    FOR rsv IN reservation_cursor(sem .semester) LOOP
+      v_reservation_count := rsv.total_reservations;
+    END LOOP;
+
+    FOR bb IN borrow_cursor(sem .semester) LOOP
+      v_borrow_count := bb.total_borrowed;
+    END LOOP;
+
+ v_total_readers := v_total_readers + v_reader_count;
+ v_total_reservations := v_total_reservations + v_reservation_count;
+ v_total_borrowed := v_total_borrowed + v_borrow_count;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || 'Semester ' || sem .semester);
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 70, '-'));
+    DBMS_OUTPUT.PUT_LINE('Total Readers       : ' || v_reader_count);
+    DBMS_OUTPUT.PUT_LINE('Total Reservations  : ' || v_reservation_count);
+    DBMS_OUTPUT.PUT_LINE('Total Books Borrowed: ' || v_borrow_count);
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 70, '='));
+  END LOOP;
+
+
+  DBMS_OUTPUT.PUT_LINE(CHR(10) || 'GRAND TOTAL FOR YEAR ' || inputyear);
+  DBMS_OUTPUT.PUT_LINE(RPAD('-', 70, '-'));
+  DBMS_OUTPUT.PUT_LINE('Total Readers (All Semesters)       : ' || v_total_readers);
+  DBMS_OUTPUT.PUT_LINE('Total Reservations (All Semesters)  : ' || v_total_reservations);
+  DBMS_OUTPUT.PUT_LINE('Total Books Borrowed (All Semesters): ' || v_total_borrowed);
+  DBMS_OUTPUT.PUT_LINE(RPAD('=', 70, '='));
+
+END;
+/
