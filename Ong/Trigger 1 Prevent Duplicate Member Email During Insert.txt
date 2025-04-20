@@ -1,0 +1,26 @@
+DROP TRIGGER trg_prevent_duplicate_email;
+SET SERVEROUTPUT ON
+
+CREATE OR REPLACE TRIGGER trg_prevent_duplicate_email
+BEFORE INSERT ON Member
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count
+    FROM Member
+    WHERE LOWER(Email) = LOWER(:NEW.Email);
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Email address already exists. Please use a different email.');
+    END IF;
+END;
+/
+-- ALTER TRIGGER trg_prevent_duplicate_email ENABLE;
+-- ALTER TRIGGER trg_prevent_duplicate_email DISABLE;
+
+-- to test 
+-- INSERT INTO Member (MemberID, Name, Email, Status)
+-- VALUES ('M10022', 'Bob Lee', 'ALICE@example.com', 'Active');
+-- INSERT INTO Member (MemberID, Name, Email, Status)
+-- VALUES ('M10011', 'Alice Tan', 'alice@example.com', 'Active');

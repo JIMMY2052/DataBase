@@ -1,0 +1,35 @@
+CLEAR COLUMNS
+CLEAR BREAKS
+CLEAR COMPUTES
+
+SET PAGESIZE 50
+SET LINESIZE 200
+SET UNDERLINE =
+COLUMN MemberID HEADING 'Member ID' FORMAT A10
+COLUMN Name HEADING 'Member Name' FORMAT A30
+COLUMN TotalCollected HEADING 'Total|Collected' FORMAT 999
+COLUMN CollectedDates HEADING 'Reservation Dates (Collected)' FORMAT A80 WORD_WRAPPED
+
+TTITLE LEFT 'Library Management System' SKIP 1 -
+       LEFT 'Report: Members With 3 or More Collected Reservations This Month' SKIP 2
+
+SELECT
+    m.MemberID,
+    m.Name,
+    COUNT(*) AS TotalCollected,
+    LISTAGG(TO_CHAR(r.ReservationDate, 'DD-Mon-YYYY'), ', ') WITHIN GROUP (ORDER BY r.ReservationDate) AS CollectedDates
+FROM
+    Member m
+    JOIN Reservation r ON m.MemberID = r.MemberID
+WHERE
+    r.Status = 'Collected'
+    AND EXTRACT(MONTH FROM r.ReservationDate) = EXTRACT(MONTH FROM SYSDATE)
+    AND EXTRACT(YEAR FROM r.ReservationDate) = EXTRACT(YEAR FROM SYSDATE)
+GROUP BY
+    m.MemberID, m.Name
+HAVING
+    COUNT(*) >= 3
+ORDER BY
+    TotalCollected DESC;
+
+TTITLE OFF

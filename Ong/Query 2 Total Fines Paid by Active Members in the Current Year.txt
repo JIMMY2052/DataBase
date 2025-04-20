@@ -1,0 +1,38 @@
+CLEAR COLUMNS
+CLEAR BREAKS
+CLEAR COMPUTES
+
+SET PAGESIZE 50
+SET LINESIZE 200
+SET UNDERLINE =
+
+COLUMN MemberID HEADING 'Member|ID' FORMAT A10
+COLUMN Name HEADING 'Member|Name' FORMAT A30
+COLUMN TotalFinesPaid HEADING 'Total|Fines Paid (RM)' FORMAT $9999.99
+COLUMN PaidDates HEADING 'Payment|Dates' FORMAT A60 WORD_WRAPPED
+
+TTITLE LEFT 'Library Management System' SKIP 1 -
+       LEFT 'Report: Total Fines Paid by Active Members in Current Year' SKIP 2
+
+SELECT
+    m.MemberID,
+    m.Name,
+    NVL(SUM(f.Amount), 0) AS TotalFinesPaid,
+    NVL(LISTAGG(TO_CHAR(f.PaymentDate, 'DD-Mon-YYYY'), ', ') 
+         WITHIN GROUP (ORDER BY f.PaymentDate), '-') AS PaidDates
+FROM
+    Member m
+    LEFT JOIN BorrowBook bb ON m.MemberID = bb.MemberID
+    LEFT JOIN Fine f ON bb.BorrowBookID = f.BorrowBookID AND f.FineStatus = 'Paid'
+WHERE
+    m.Status = 'Active'
+    AND f.PaymentDate IS NOT NULL
+    AND EXTRACT(YEAR FROM f.PaymentDate) = EXTRACT(YEAR FROM SYSDATE)
+GROUP BY
+    m.MemberID, m.Name
+HAVING
+    SUM(f.Amount) > 0
+ORDER BY
+    TotalFinesPaid DESC;
+
+TTITLE OFF

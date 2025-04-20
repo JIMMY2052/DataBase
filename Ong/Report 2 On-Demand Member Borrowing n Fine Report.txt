@@ -1,0 +1,56 @@
+DROP PROCEDURE MemberBorrowingFineReport;
+
+CREATE OR REPLACE PROCEDURE MemberBorrowingFineReport(p_MemberID IN VARCHAR2) IS
+    v_Name Member.Name%TYPE;
+
+    -- Cursor 1: Get member name
+    CURSOR cur_member IS
+        SELECT Name FROM Member WHERE MemberID = p_MemberID;
+
+    -- Cursor 2: Get all borrowings
+    CURSOR cur_borrow IS
+        SELECT BorrowBookID, TO_CHAR(BorrowDate, 'DD-Mon-YYYY') AS BorrowDate
+        FROM BorrowBook
+        WHERE MemberID = p_MemberID
+        ORDER BY BorrowDate;
+
+    -- Nested cursor: Get fines per borrow record
+    CURSOR cur_fine(p_borrow_id BorrowBook.BorrowBookID%TYPE) IS
+        SELECT TO_CHAR(PaymentDate, 'DD-Mon-YYYY') AS PayDate, Amount, FineStatus
+        FROM Fine
+        WHERE BorrowBookID = p_borrow_id;
+
+BEGIN
+    -- Get member name
+    OPEN cur_member;
+    FETCH cur_member INTO v_Name;
+    IF cur_member%NOTFOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No such member with ID: ' || p_MemberID);
+        CLOSE cur_member;
+        RETURN;
+    END IF;
+    CLOSE cur_member;
+
+    DBMS_OUTPUT.PUT_LINE('Borrowing n Fine Report for Member ID: ' || p_MemberID);
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_Name);
+    DBMS_OUTPUT.PUT_LINE('===============================================================');
+
+    -- Loop over borrowing records
+    FOR borrow_rec IN cur_borrow LOOP
+        DBMS_OUTPUT.PUT_LINE(CHR(10) || 'BorrowBook ID: ' || borrow_rec.BorrowBookID ||
+                             ' | Borrow Date: ' || borrow_rec.BorrowDate);
+        DBMS_OUTPUT.PUT_LINE('  Payment Date     |  Amount (RM)  |  Fine Status');
+        DBMS_OUTPUT.PUT_LINE('  ---------------- |  ------------ |  -------------');
+
+        -- Nested: loop over fines for each borrow
+        FOR fine_rec IN cur_fine(borrow_rec.BorrowBookID) LOOP
+            DBMS_OUTPUT.PUT_LINE('  ' || RPAD(fine_rec.PayDate, 16) || ' | ' ||
+                                       LPAD(TO_CHAR(fine_rec.Amount, '9990.00'), 12) || ' | ' ||
+                                       fine_rec.FineStatus);
+        END LOOP;
+    END LOOP;
+END;
+/
+
+SET SERVEROUTPUT ON;
+EXEC MemberBorrowingFineReport('M00030');

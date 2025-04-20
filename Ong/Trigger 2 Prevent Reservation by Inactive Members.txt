@@ -1,0 +1,26 @@
+DROP TRIGGER block_reservations;
+
+-- Create trigger
+CREATE OR REPLACE TRIGGER block_reservations
+BEFORE INSERT ON Reservation
+FOR EACH ROW
+DECLARE
+    v_status VARCHAR2(20);
+BEGIN
+    SELECT Status INTO v_status
+    FROM Member
+    WHERE MemberID = :NEW.MemberID;
+
+    IF v_status = 'Inactive' THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Inactive members are not allowed to make reservations.');
+    END IF;
+END;
+/
+
+-- Step 1: Set a member's status to 'Inactive'
+UPDATE Member
+SET Status = 'Inactive'
+WHERE MemberID = 'M00001';
+
+-- Step 2: Try inserting a reservation for that inactive member
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00001', NULL, '978396733209342', 'BC00099', SYSDATE, 'Pending');

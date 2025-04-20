@@ -1,0 +1,38 @@
+DROP PROCEDURE GetLatestReservation;
+SET SERVEROUTPUT ON
+
+CREATE OR REPLACE PROCEDURE GetLatestReservation IS
+    CURSOR cur_member IS
+        SELECT 
+            m.MemberID,
+            m.Name,
+            (SELECT MAX(r.ReservationDate)
+             FROM Reservation r
+             WHERE r.MemberID = m.MemberID) AS LatestReservation
+        FROM
+            Member m
+        WHERE
+            m.Status = 'Active';
+
+    v_MemberID Member.MemberID%TYPE;
+    v_Name     Member.Name%TYPE;
+    v_LatestReservation Reservation.ReservationDate%TYPE;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Active Members and Their Latest Reservation Date:');
+    DBMS_OUTPUT.PUT_LINE('---------------------------------------------------');
+
+    OPEN cur_member;
+    LOOP
+        FETCH cur_member INTO v_MemberID, v_Name, v_LatestReservation;
+        EXIT WHEN cur_member%NOTFOUND;
+        
+        DBMS_OUTPUT.PUT_LINE('Member ID: ' || v_MemberID || 
+                             ', Name: ' || v_Name || 
+                             ', Latest Reservation: ' || NVL(TO_CHAR(v_LatestReservation, 'DD-Mon-YYYY'), 'None'));
+    END LOOP;
+    CLOSE cur_member;
+END;
+/
+
+EXEC GetLatestReservation;

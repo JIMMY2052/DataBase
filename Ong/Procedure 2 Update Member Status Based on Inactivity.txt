@@ -1,0 +1,35 @@
+DROP PROCEDURE UpdateInactiveMembers;
+
+CREATE OR REPLACE PROCEDURE UpdateInactiveMembers IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Members updated to Inactive status:');
+    DBMS_OUTPUT.PUT_LINE('-----------------------------------');
+
+    FOR rec IN (
+        SELECT MemberID, Name
+        FROM Member
+        WHERE MemberID NOT IN (
+            SELECT DISTINCT MemberID
+            FROM Reservation
+            WHERE ReservationDate >= ADD_MONTHS(SYSDATE, -12)
+        )
+        AND Status != 'Inactive'
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE('Member ID: ' || rec.MemberID || ' | Name: ' || rec.Name);
+    END LOOP;
+
+    -- Perform update
+    UPDATE Member m
+    SET m.Status = 'Inactive'
+    WHERE m.MemberID NOT IN (
+        SELECT DISTINCT r.MemberID
+        FROM Reservation r
+        WHERE r.ReservationDate >= ADD_MONTHS(SYSDATE, -12)
+    )
+    AND m.Status != 'Inactive';
+
+    DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT || ' member(s) updated to Inactive status.');
+END;
+/
+SET SERVEROUTPUT ON;
+EXEC UpdateInactiveMembers;

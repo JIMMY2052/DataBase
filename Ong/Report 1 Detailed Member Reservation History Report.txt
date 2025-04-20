@@ -1,0 +1,35 @@
+SET SERVEROUTPUT ON;
+
+DROP PROCEDURE MemberReservationReport;
+
+CREATE OR REPLACE PROCEDURE MemberReservationReport IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Detailed Member Reservation History Report');
+    DBMS_OUTPUT.PUT_LINE('===========================================');
+
+    -- Outer cursor: Active members
+    FOR member_rec IN (
+        SELECT MemberID, Name
+        FROM Member
+        WHERE Status = 'Active'
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(CHR(10) || 'Member ID: ' || member_rec.MemberID || ' | Name: ' || member_rec.Name);
+        DBMS_OUTPUT.PUT_LINE('  Reservation Date   |  Status');
+        DBMS_OUTPUT.PUT_LINE('  ------------------ |  ---------');
+
+        -- Inner cursor: Reservations for current member
+        FOR res_rec IN (
+            SELECT TO_CHAR(ReservationDate, 'DD-Mon-YYYY') AS ResDate, Status
+            FROM Reservation
+            WHERE MemberID = member_rec.MemberID
+            ORDER BY ReservationDate
+        ) LOOP
+            DBMS_OUTPUT.PUT_LINE('  ' || RPAD(res_rec.ResDate, 18) || ' | ' || res_rec.Status);
+        END LOOP;
+
+        DBMS_OUTPUT.PUT_LINE('--------------------------------------------------');
+    END LOOP;
+END;
+/
+
+EXEC MemberReservationReport;
