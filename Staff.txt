@@ -1,37 +1,24 @@
 DROP TABLE Staff;
 
 CREATE TABLE Staff (
-    StaffID VARCHAR2(10) NOT NULL PRIMARY KEY,
+    StaffID VARCHAR2(8) NOT NULL PRIMARY KEY CONSTRAINT chk_staffid_format CHECK (REGEXP_LIKE(StaffID, '^STF[0-9]{5}$')),
     Name VARCHAR2(100) NOT NULL,
-    Email VARCHAR2(100) NOT NULL,
-    PhoneNumber VARCHAR2(20) NOT NULL,
+    Email VARCHAR2(100) NOT NULL CONSTRAINT chk_email_format CHECK (REGEXP_LIKE(Email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')),
+    PhoneNumber VARCHAR2(20) NOT NULL CONSTRAINT chk_phone_format CHECK (REGEXP_LIKE(PhoneNumber, '^[0-9]{10,11}$')),
     Role VARCHAR2(20) NOT NULL,
-    Status VARCHAR2(10) DEFAULT 'Active' 
-        CHECK (Status IN ('Active', 'Inactive')),
-    
-    -- Format Checks
-    CONSTRAINT chk_staffid_format 
-        CHECK (REGEXP_LIKE(StaffID, '^S[0-9]{3}$')),
-    
-    CONSTRAINT chk_email_format 
-        CHECK (REGEXP_LIKE(Email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')),
-    
-    CONSTRAINT chk_phone_format 
-        CHECK (REGEXP_LIKE(PhoneNumber, '^[0-9]{10,11}$'))
+    Status VARCHAR2(10) DEFAULT 'Active' CHECK (Status IN ('Active', 'Inactive'))
 );
 
-
-INSERT INTO Staff VALUES ('STF001', 'Alice Tan', 'alice.tan@example.com', '0123456789', 'Manager', 'Active');
-INSERT INTO Staff VALUES ('STF002', 'Ben Lim', 'ben.lim@example.com', '0112345678', 'Assistant', 'Active');
-INSERT INTO Staff VALUES ('STF003', 'Catherine Ong', 'catherine.ong@example.com', '0134567890', 'Executive', 'Inactive');
-INSERT INTO Staff VALUES ('STF004', 'David Lee', 'david.lee@example.com', '0145678901', 'Manager', 'Active');
-INSERT INTO Staff VALUES ('STF005', 'Elaine Ng', 'elaine.ng@example.com', '0156789012', 'Executive', 'Active');
-INSERT INTO Staff VALUES ('STF006', 'Faizal Rahman', 'faizal.rahman@example.com', '0167890123', 'Assistant', 'Active');
-INSERT INTO Staff VALUES ('STF007', 'Grace Low', 'grace.low@example.com', '0178901234', 'Manager', 'Inactive');
-INSERT INTO Staff VALUES ('STF008', 'Hafiz Ahmad', 'hafiz.ahmad@example.com', '0189012345', 'Executive', 'Active');
-INSERT INTO Staff VALUES ('STF009', 'Irene Teo', 'irene.teo@example.com', '0190123456', 'Assistant', 'Active');
-INSERT INTO Staff VALUES ('STF010', 'Jason Chua', 'jason.chua@example.com', '0121098765', 'Executive', 'Active');
-
+INSERT INTO Staff VALUES ('STF00001', 'Alice Tan', 'alice.tan@example.com', '0123456789', 'Manager', 'Active');
+INSERT INTO Staff VALUES ('STF00002', 'Ben Lim', 'ben.lim@example.com', '0112345678', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF00003', 'Catherine Ong', 'catherine.ong@example.com', '0134567890', 'Executive', 'Inactive');
+INSERT INTO Staff VALUES ('STF00004', 'David Lee', 'david.lee@example.com', '0145678901', 'Manager', 'Active');
+INSERT INTO Staff VALUES ('STF00005', 'Elaine Ng', 'elaine.ng@example.com', '0156789012', 'Executive', 'Active');
+INSERT INTO Staff VALUES ('STF00006', 'Faizal Rahman', 'faizal.rahman@example.com', '0167890123', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF00007', 'Grace Low', 'grace.low@example.com', '0178901234', 'Manager', 'Inactive');
+INSERT INTO Staff VALUES ('STF00008', 'Hafiz Ahmad', 'hafiz.ahmad@example.com', '0189012345', 'Executive', 'Active');
+INSERT INTO Staff VALUES ('STF00009', 'Irene Teo', 'irene.teo@example.com', '0190123456', 'Assistant', 'Active');
+INSERT INTO Staff VALUES ('STF00010', 'Jason Chua', 'jason.chua@example.com', '0121098765', 'Executive', 'Active');
 
 --10 rows
 

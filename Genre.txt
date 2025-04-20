@@ -1,22 +1,21 @@
-drop table Genre;
+DROP TABLE Genre;
+
 CREATE TABLE Genre (
-    GenreID            VARCHAR2(10) PRIMARY KEY,
-    Description        VARCHAR2(100),
-    GenreName          VARCHAR2(50)
+    GenreID            VARCHAR2(6) PRIMARY KEY CONSTRAINT GenreID_Format CHECK (REGEXP_LIKE(GenreID, '^G[0-9]{5}$')),
+    GenreName          VARCHAR2(50),
+    Description        VARCHAR2(100)
 );
 
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00001', 'Fiction', 'Fictional books including novels and short stories');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00002', 'Non-Fiction', 'Books based on real events or biographies');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00003', 'Mystery', 'Books that involve solving a crime or uncovering secrets');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00004', 'Science Fiction', 'Books that explore futuristic concepts and technology');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00005', 'Fantasy', 'Books with magical elements or imaginary worlds');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00006', 'Educational', 'Books that provide information on various subjects');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00007', 'Historical', 'Books based on real-life incidents or history');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00008', 'Romance', 'Books that explore romantic relationships');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00009', 'Children', 'Books for children and young readers');
+INSERT INTO Genre (GenreID, GenreName, Description) VALUES ('G00010', 'Self-Help', 'Books that focus on self-help and motivation');
 
 
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G001', 'Fictional books including novels and short stories', 'Fiction');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G002', 'Books based on real events or biographies', 'Non-Fiction');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G003', 'Books that involve solving a crime or uncovering secrets', 'Mystery');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G004', 'Books that explore futuristic concepts and technology', 'Science Fiction');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G005', 'Books with magical elements or imaginary worlds', 'Fantasy');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G006', 'Books that provide information on various subjects', 'Educational');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G007', 'Books based on real-life incidents or history', 'Historical');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G008', 'Books that explore romantic relationships', 'Romance');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G009', 'Books for children and young readers', 'Children');
-INSERT INTO Genre (GenreID, Description, GenreName) VALUES ('G010', 'Books that focus on self-help and motivation', 'Self-Help');
-
-select count(*) as "No of Genre"
-from Genre;
+SELECT COUNT(*) AS "No of Genre" FROM Genre;

@@ -9,7 +9,6 @@ CREATE TABLE Book (
     Language           VARCHAR(30)
 );
 
-
 INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978918486085683', 'Mobile App Dev 5', 'John Smith', 2007, 45.56, 'This is a book about mobile app dev 5.', 'English');
 INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978653049967802', 'Python Essentials 4', 'John Smith', 2013, 44.41, 'This is a book about python essentials 4.', 'Chinese');
 INSERT INTO Book (ISBN, Title, Author, PublicationYear, Price, Description, Language) VALUES ('978160167712882', 'Python Essentials 5', 'Emily Chan', 2010, 112.81, 'This is a book about python essentials 5.', 'English');

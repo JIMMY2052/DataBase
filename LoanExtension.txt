@@ -2,36 +2,36 @@ drop table LoanExtension;
 
 CREATE TABLE LoanExtension (
     LoanExtensionID VARCHAR(10) PRIMARY KEY CHECK (REGEXP_LIKE(LoanExtensionID, '^LE[0-9]{8}$')),
-    BorrowBookID VARCHAR(10) NOT NULL,
+    BorrowBookID VARCHAR(7) NOT NULL,
     ExtendedDueDate DATE NOT NULL,
     FOREIGN KEY (BorrowBookID) REFERENCES BorrowBook(BorrowBookID)
 );
 
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000001', 'BB0001', TO_DATE('2025-03-21', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000002', 'BB0002', TO_DATE('2025-12-21', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000003', 'BB0003', TO_DATE('2025-06-28', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000004', 'BB0004', TO_DATE('2025-04-25', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000005', 'BB0005', TO_DATE('2025-07-02', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000006', 'BB0006', TO_DATE('2025-03-23', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000007', 'BB0007', TO_DATE('2025-07-23', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000008', 'BB0008', TO_DATE('2025-07-09', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000009', 'BB0009', TO_DATE('2025-08-01', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000010', 'BB0010', TO_DATE('2025-12-01', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000011', 'BB0011', TO_DATE('2025-11-19', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000012', 'BB0012', TO_DATE('2025-08-30', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000013', 'BB0013', TO_DATE('2025-02-17', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000014', 'BB0014', TO_DATE('2025-01-27', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000015', 'BB0015', TO_DATE('2025-08-28', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000016', 'BB0016', TO_DATE('2025-06-13', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000017', 'BB0017', TO_DATE('2025-09-19', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000018', 'BB0018', TO_DATE('2025-07-09', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000019', 'BB0019', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000020', 'BB0020', TO_DATE('2025-06-01', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000021', 'BB0021', TO_DATE('2025-04-14', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000022', 'BB0022', TO_DATE('2025-08-24', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000023', 'BB0023', TO_DATE('2025-12-27', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000024', 'BB0024', TO_DATE('2025-07-13', 'YYYY-MM-DD'));
-INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000025', 'BB0025', TO_DATE('2025-06-25', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000001', 'BB00001', TO_DATE('2025-03-21', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000002', 'BB00002', TO_DATE('2025-12-21', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000003', 'BB00003', TO_DATE('2025-06-28', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000004', 'BB00004', TO_DATE('2025-04-25', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000005', 'BB00005', TO_DATE('2025-07-02', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000006', 'BB00006', TO_DATE('2025-03-23', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000007', 'BB00007', TO_DATE('2025-07-23', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000008', 'BB00008', TO_DATE('2025-07-09', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000009', 'BB00009', TO_DATE('2025-08-01', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000010', 'BB00010', TO_DATE('2025-12-01', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000011', 'BB00011', TO_DATE('2025-11-19', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000012', 'BB00012', TO_DATE('2025-08-30', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000013', 'BB00013', TO_DATE('2025-02-17', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000014', 'BB00014', TO_DATE('2025-01-27', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000015', 'BB00015', TO_DATE('2025-08-28', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000016', 'BB00016', TO_DATE('2025-06-13', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000017', 'BB00017', TO_DATE('2025-09-19', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000018', 'BB00018', TO_DATE('2025-07-09', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000019', 'BB00019', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000020', 'BB00020', TO_DATE('2025-06-01', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000021', 'BB00021', TO_DATE('2025-04-14', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000022', 'BB00022', TO_DATE('2025-08-24', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000023', 'BB00023', TO_DATE('2025-12-27', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000024', 'BB00024', TO_DATE('2025-07-13', 'YYYY-MM-DD'));
+INSERT INTO LoanExtension (LoanExtensionID, BorrowBookID, ExtendedDueDate) VALUES ('LE00000025', 'BB00025', TO_DATE('2025-06-25', 'YYYY-MM-DD'));
 
 select count(*) as "No of LoanExtension"
 from LoanExtension;
