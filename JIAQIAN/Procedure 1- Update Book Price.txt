@@ -32,6 +32,8 @@ END;
 SET SERVEROUTPUT ON;
 
 BEGIN
-    UpdateBookPrice('978802533807786',50);
+    UpdateBookPrice('978802533807786',30);
 END;
 /
+
+Select * from book where ISBN = '978802533807786';

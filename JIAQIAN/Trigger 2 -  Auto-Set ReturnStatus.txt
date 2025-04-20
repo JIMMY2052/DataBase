@@ -30,12 +30,12 @@ SELECT
     TO_CHAR(BorrowDate, 'YYYY-MM-DD') AS BorrowDate,
     TO_CHAR(DueDate, 'YYYY-MM-DD') AS DueDate
 FROM BorrowBook
-WHERE BorrowBookID = 'BB00292';
+WHERE BorrowBookID = 'BB00299';
 
 
-INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00201', 'BB00292',  TO_DATE('2025-01-30', 'YYYY-MM-DD'));
+INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00201', 'BB00299',  TO_DATE('2025-04-14', 'YYYY-MM-DD'));
 
-INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00202', 'BB00292', TO_DATE('2025-01-31', 'YYYY-MM-DD'));
+INSERT INTO ReturnBook (ReturnBookID, BorrowBookID,ReturnDate) VALUES ('RB00202', 'BB00299', TO_DATE('2025-04-15', 'YYYY-MM-DD'));
 
 SELECT * FROM ReturnBook
 WHERE ReturnBookID IN ('RB00201', 'RB00202');

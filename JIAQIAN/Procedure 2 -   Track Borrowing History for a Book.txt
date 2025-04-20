@@ -41,7 +41,6 @@ BEGIN
             ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
         WHERE 
             bc.ISBN = p_ISBN
-            AND bb.BorrowDate >= ADD_MONTHS(SYSDATE, -6)
         ORDER BY 
             bb.BorrowDate DESC
     ) LOOP
@@ -65,4 +64,4 @@ END;
 
 -- run the Program
 SET SERVEROUTPUT ON;
-EXEC TrackBorrowingHistory('978281281973001');
+EXEC TrackBorrowingHistory('978389148186586');
