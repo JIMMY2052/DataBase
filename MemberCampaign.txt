@@ -51,7 +51,7 @@ INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00019', 'M00019', 'CMP00009', TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Y');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00020', 'M00020', 'CMP00010', TO_DATE('2025-04-20', 'YYYY-MM-DD'), 'N');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00021', 'M00021', 'CMP00001', TO_DATE('2025-05-01', 'YYYY-MM-DD'), 'Y');
-INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00022', 'M00022', 'CMP00002', TO_DATE('2025-05-02', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00022', 'M00022', 'CMP00002', TO_DATE('2025-05-02', 'YYYY-MM-DD'), 'Y');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00023', 'M00023', 'CMP00003', TO_DATE('2025-05-03', 'YYYY-MM-DD'), 'Y');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00024', 'M00024', 'CMP00004', TO_DATE('2025-05-04', 'YYYY-MM-DD'), 'N');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00025', 'M00025', 'CMP00005', TO_DATE('2025-05-05', 'YYYY-MM-DD'), 'Y');

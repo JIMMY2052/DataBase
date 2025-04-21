@@ -12,7 +12,7 @@ CREATE TABLE Fine (
 );
 
 INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00001', NULL, 'BB00002', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00002', NULL, 'BB00003', 112.62, TO_DATE('2025-03-27', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00002', 'MC00022', 'BB00003', 112.62, TO_DATE('2025-03-27', 'YYYY-MM-DD'), 'Paid');
 INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00003', NULL, 'BB00004', 6.00, TO_DATE('2025-03-10', 'YYYY-MM-DD'), 'Paid');
 INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00004', NULL, 'BB00005', NULL, NULL, 'Unpaid');
 INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00005', NULL, 'BB00006', NULL, NULL, 'Unpaid');
