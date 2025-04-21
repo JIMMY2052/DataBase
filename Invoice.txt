@@ -12,67 +12,67 @@ CREATE TABLE Invoice (
 );
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00001', 'F00001', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 6.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00001', 'F00001', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 6.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00002', 'F00002', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 8.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00003', 'F00003', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 8.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00003', 'F00003', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 8.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00004', 'F00004', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 9.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00004', 'F00004', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 9.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00005', 'F00005', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 11.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00006', 'F00006', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 11.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00006', 'F00006', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 11.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00007', 'F00007', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 12.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00007', 'F00007', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 12.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00008', 'F00008', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 14.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00009', 'F00009', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 14.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00009', 'F00009', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 14.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00010', 'F00010', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 15.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00011', 'F00011', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00011', 'F00011', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00012', 'F00012', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 17.0, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00013', 'F00013', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 18.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00013', 'F00013', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 18.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00014', 'F00014', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 20.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00015', 'F00015', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 20.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00015', 'F00015', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 20.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00016', 'F00016', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 21.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00016', 'F00016', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 21.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00017', 'F00017', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 23.5, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00018', 'F00018', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 23.0, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00018', 'F00018', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 23.0, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00019', 'F00019', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 24.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00019', 'F00019', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 24.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00020', 'F00020', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.5, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00020', 'F00020', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.5, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00021', 'F00021', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 26.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00021', 'F00021', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 26.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00022', 'F00022', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 27.75, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -81,13 +81,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00023', 'F00023', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 29.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00024', 'F00024', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 29.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00024', 'F00024', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 29.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00025', 'F00025', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 30.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00025', 'F00025', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 30.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00026', 'F00026', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00026', 'F00026', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00027', 'F00027', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 32.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -99,22 +99,22 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00029', 'F00029', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 35.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00030', 'F00030', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00030', 'F00030', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00031', 'F00031', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 36.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00031', 'F00031', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 36.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00032', 'F00032', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00033', 'F00033', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 38.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00033', 'F00033', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 38.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00034', 'F00034', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 39.75, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00034', 'F00034', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 39.75, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00035', 'F00035', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 41.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00035', 'F00035', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 41.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00036', 'F00036', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 41.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -126,7 +126,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00038', 'F00038', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.5, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00039', 'F00039', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.0, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00039', 'F00039', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.0, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00040', 'F00040', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 45.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -135,19 +135,19 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00041', 'F00041', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 47.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00042', 'F00042', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 47.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00042', 'F00042', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 47.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00043', 'F00043', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 48.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00043', 'F00043', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 48.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00044', 'F00044', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 50.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00044', 'F00044', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 50.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00045', 'F00045', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 50.0, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00046', 'F00046', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 5.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00046', 'F00046', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 5.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00047', 'F00047', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 7.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -162,7 +162,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00050', 'F00050', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 10.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00051', 'F00051', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 10.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00051', 'F00051', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 10.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00052', 'F00052', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 11.75, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -171,7 +171,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00053', 'F00053', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00054', 'F00054', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00054', 'F00054', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00055', 'F00055', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 14.75, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -183,19 +183,19 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00057', 'F00057', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 16.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00058', 'F00058', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00058', 'F00058', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00059', 'F00059', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 19.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00059', 'F00059', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 19.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00060', 'F00060', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 19.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00060', 'F00060', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 19.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00061', 'F00061', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 20.75, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00061', 'F00061', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 20.75, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00062', 'F00062', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 22.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00062', 'F00062', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 22.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00063', 'F00063', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 22.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -204,13 +204,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00064', 'F00064', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 23.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00065', 'F00065', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 25.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00065', 'F00065', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 25.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00066', 'F00066', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 25.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00067', 'F00067', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00067', 'F00067', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00068', 'F00068', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 28.5, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -222,13 +222,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00070', 'F00070', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 29.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00071', 'F00071', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 31.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00071', 'F00071', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 31.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00072', 'F00072', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 31.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00073', 'F00073', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00073', 'F00073', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00074', 'F00074', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 34.5, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -237,80 +237,79 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00075', 'F00075', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 34.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00076', 'F00076', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00076', 'F00076', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00077', 'F00077', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 37.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00077', 'F00077', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 37.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00078', 'F00078', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 37.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00078', 'F00078', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 37.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00079', 'F00079', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00079', 'F00079', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00080', 'F00080', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 40.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00080', 'F00080', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 40.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00081', 'F00081', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 40.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00082', 'F00082', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 41.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00082', 'F00082', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 41.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00083', 'F00083', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 43.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00084', 'F00084', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 43.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00084', 'F00084', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 43.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00085', 'F00085', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 44.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00086', 'F00086', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 46.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00086', 'F00086', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 46.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00087', 'F00087', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 46.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00087', 'F00087', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 46.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00088', 'F00088', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 47.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00089', 'F00089', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 49.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00089', 'F00089', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 49.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00090', 'F00090', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 49.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00090', 'F00090', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 49.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00091', 'F00091', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 50.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00091', 'F00091', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 50.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00092', 'F00092', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 6.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
+VALUES ('INV00092', 'F00092', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 6.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00093', 'F00093', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 6.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00093', 'F00093', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 6.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00094', 'F00094', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 7.75, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00094', 'F00094', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 7.75, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00095', 'F00095', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 9.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00095', 'F00095', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 9.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00096', 'F00096', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 9.0, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00097', 'F00097', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 10.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00097', 'F00097', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 10.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00098', 'F00098', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 12.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00098', 'F00098', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 12.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00099', 'F00099', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 12.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00100', 'F00100', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 13.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
-
 
 --100 rows
 
