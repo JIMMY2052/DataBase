@@ -2,7 +2,7 @@ drop table Fine;
 
 CREATE TABLE Fine (
     FineID             VARCHAR2(6) PRIMARY KEY CONSTRAINT chk_fineid_format CHECK (REGEXP_LIKE(FineID, '^F[0-9]{5}$')),
-    MemberMemberCampaignID         VARCHAR2(7),
+    MemberCampaignID         VARCHAR2(7),
     BorrowBookID       VARCHAR2(7) NOT NULL,
     Amount             NUMBER(8,2),
     PaymentDate        DATE,
