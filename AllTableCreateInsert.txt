@@ -114,6 +114,12 @@ CREATE TABLE Campaign (
     FOREIGN KEY (ApprovedByStaffID) REFERENCES Staff(StaffID)
 );
 
+CREATE SEQUENCE member_campaign_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
 CREATE TABLE MemberCampaign (
     MemberCampaignId VARCHAR2(7) PRIMARY KEY,
     MemberId VARCHAR2(10),
@@ -171,12 +177,6 @@ CREATE TABLE BookGenre (
     FOREIGN KEY (ISBN) REFERENCES Book(ISBN),
     FOREIGN KEY (GenreID) REFERENCES Genre(GenreID)
 );
-
-CREATE SEQUENCE member_campaign_seq
-  START WITH 1
-  INCREMENT BY 1
-  NOCACHE
-  NOCYCLE;
 
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00001', 'Victor', 'victor@example.com', '0178904855', TO_DATE('2021-04-22', 'YYYY-MM-DD'), TO_DATE('2024-04-21', 'YYYY-MM-DD'), 'Active', 5, TO_DATE('2021-07-21', 'YYYY-MM-DD'));
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00002', 'Wendy', 'wendy@example.com', '0167390426', TO_DATE('2022-10-28', 'YYYY-MM-DD'), TO_DATE('2025-10-27', 'YYYY-MM-DD'), 'Active', 1, NULL);
