@@ -3,7 +3,7 @@ DROP TABLE MemberCampaign CASCADE CONSTRAINTS;
 DROP SEQUENCE member_campaign_seq;
 
 CREATE SEQUENCE member_campaign_seq
-  START WITH 1
+  START WITH 40
   INCREMENT BY 1
   NOCACHE
   NOCYCLE;
@@ -17,18 +17,6 @@ CREATE TABLE MemberCampaign (
     FOREIGN KEY (MemberId) REFERENCES Member(MemberId),
     FOREIGN KEY (CampaignId) REFERENCES Campaign(CampaignId)
 );
-
-CREATE OR REPLACE TRIGGER trg_member_campaign_id
-BEFORE INSERT ON MemberCampaign
-FOR EACH ROW
-DECLARE
-  seq_num NUMBER;
-BEGIN
-  seq_num := member_campaign_seq.NEXTVAL;
-
-  :NEW.MemberCampaignId := 'MC' || LPAD(seq_num, 5, '0');
-END;
-/
 
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00001', 'M00001', 'CMP00001', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 'Y');
 INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00002', 'M00002', 'CMP00002', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'N');
