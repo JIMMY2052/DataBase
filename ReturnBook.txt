@@ -1,8 +1,7 @@
 drop table ReturnBook;
 
 CREATE TABLE ReturnBook (
-    ReturnBookID       VARCHAR2(7) PRIMARY KEY CHECK (REGEXP_LIKE(ReturnBookID, '^RB[0-9]{5}$'))
-,
+    ReturnBookID       VARCHAR2(7) PRIMARY KEY CHECK (REGEXP_LIKE(ReturnBookID, '^RB[0-9]{5}$')),
     BorrowBookID       VARCHAR2(7) NOT NULL,
     ReturnStatus       VARCHAR2(10) CHECK (ReturnStatus IN ('On Time', 'Late', 'Lost')),
     ReturnDate         DATE,

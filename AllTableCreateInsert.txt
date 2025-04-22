@@ -1,6 +1,8 @@
 DROP table BookGenre;
 DROP table Genre;
 DROP TABLE ReturnBook;
+DROP TABLE MemberCampaign CASCADE CONSTRAINTS;
+DROP SEQUENCE member_campaign_seq;
 DROP TABLE Invoice;
 DROP table LoanExtension;
 DROP TABLE Fine;
@@ -77,15 +79,12 @@ CREATE TABLE LoanExtension (
 );
 
 CREATE TABLE ReturnBook (
-    ReturnBookID       VARCHAR2(7) PRIMARY KEY CHECK (REGEXP_LIKE(ReturnBookID, '^RB[0-9]{5}$'))
-,
+    ReturnBookID       VARCHAR2(7) PRIMARY KEY CHECK (REGEXP_LIKE(ReturnBookID, '^RB[0-9]{5}$')),
     BorrowBookID       VARCHAR2(7) NOT NULL,
     ReturnStatus       VARCHAR2(10) CHECK (ReturnStatus IN ('On Time', 'Late', 'Lost')),
     ReturnDate         DATE,
     FOREIGN KEY (BorrowBookID) REFERENCES BorrowBook(BorrowBookID)
 );
-
-
 
 CREATE TABLE Staff (
     StaffID VARCHAR2(8) NOT NULL PRIMARY KEY CONSTRAINT chk_staffid_format CHECK (REGEXP_LIKE(StaffID, '^STF[0-9]{5}$')),
@@ -115,14 +114,36 @@ CREATE TABLE Campaign (
     FOREIGN KEY (ApprovedByStaffID) REFERENCES Staff(StaffID)
 );
 
+CREATE TABLE MemberCampaign (
+    MemberCampaignId VARCHAR2(7) PRIMARY KEY,
+    MemberId VARCHAR2(10),
+    CampaignId VARCHAR2(10),
+    AssignedDate DATE DEFAULT SYSDATE,
+    IsUsed CHAR(1) DEFAULT 'N' CHECK (IsUsed IN ('Y', 'N')),
+    FOREIGN KEY (MemberId) REFERENCES Member(MemberId),
+    FOREIGN KEY (CampaignId) REFERENCES Campaign(CampaignId)
+);
+
+CREATE OR REPLACE TRIGGER trg_member_campaign_id
+BEFORE INSERT ON MemberCampaign
+FOR EACH ROW
+DECLARE
+  seq_num NUMBER;
+BEGIN
+  seq_num := member_campaign_seq.NEXTVAL;
+
+  :NEW.MemberCampaignId := 'MC' || LPAD(seq_num, 5, '0');
+END;
+/
+
 CREATE TABLE Fine (
     FineID             VARCHAR2(6) PRIMARY KEY CONSTRAINT chk_fineid_format CHECK (REGEXP_LIKE(FineID, '^F[0-9]{5}$')),
-    CampaignID         VARCHAR2(8),
+    MemberCampaignID         VARCHAR2(7),
     BorrowBookID       VARCHAR2(7) NOT NULL,
     Amount             NUMBER(8,2),
     PaymentDate        DATE,
     FineStatus         VARCHAR2(15) CHECK (FineStatus IN ('Unpaid', 'Paid')),
-    FOREIGN KEY (CampaignID) REFERENCES Campaign(CampaignID),
+    FOREIGN KEY (MemberCampaignID) REFERENCES MemberCampaign(MemberCampaignID),
     FOREIGN KEY (BorrowBookID) REFERENCES BorrowBook(BorrowBookID)
 );
 
@@ -150,6 +171,12 @@ CREATE TABLE BookGenre (
     FOREIGN KEY (ISBN) REFERENCES Book(ISBN),
     FOREIGN KEY (GenreID) REFERENCES Genre(GenreID)
 );
+
+CREATE SEQUENCE member_campaign_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
 
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00001', 'Victor', 'victor@example.com', '0178904855', TO_DATE('2021-04-22', 'YYYY-MM-DD'), TO_DATE('2024-04-21', 'YYYY-MM-DD'), 'Active', 5, TO_DATE('2021-07-21', 'YYYY-MM-DD'));
 INSERT INTO Member (MemberID, Name, Email, PhoneNumber, MembershipStartDate, MembershipExpiryDate, Status, NoShowCount, ReservationBanUntil) VALUES ('M00002', 'Wendy', 'wendy@example.com', '0167390426', TO_DATE('2022-10-28', 'YYYY-MM-DD'), TO_DATE('2025-10-27', 'YYYY-MM-DD'), 'Active', 1, NULL);
@@ -1229,299 +1256,339 @@ VALUES (
     'Pending', NULL, NULL
 );
 
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00001', 'M00001', 'CMP00001', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00002', 'M00002', 'CMP00002', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00003', 'M00003', 'CMP00003', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00004', 'M00004', 'CMP00004', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00005', 'M00005', 'CMP00005', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00006', 'M00006', 'CMP00006', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00007', 'M00007', 'CMP00007', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00008', 'M00008', 'CMP00008', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00009', 'M00009', 'CMP00009', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00010', 'M00010', 'CMP00010', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00011', 'M00011', 'CMP00001', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00012', 'M00012', 'CMP00002', TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00013', 'M00013', 'CMP00003', TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00014', 'M00014', 'CMP00004', TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00015', 'M00015', 'CMP00005', TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00016', 'M00016', 'CMP00006', TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00017', 'M00017', 'CMP00007', TO_DATE('2025-04-17', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00018', 'M00018', 'CMP00008', TO_DATE('2025-04-18', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00019', 'M00019', 'CMP00009', TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00020', 'M00020', 'CMP00010', TO_DATE('2025-04-20', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00021', 'M00021', 'CMP00001', TO_DATE('2025-05-01', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00022', 'M00022', 'CMP00002', TO_DATE('2025-05-02', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00023', 'M00023', 'CMP00003', TO_DATE('2025-05-03', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00024', 'M00024', 'CMP00004', TO_DATE('2025-05-04', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00025', 'M00025', 'CMP00005', TO_DATE('2025-05-05', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00026', 'M00026', 'CMP00006', TO_DATE('2025-05-06', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00027', 'M00027', 'CMP00007', TO_DATE('2025-05-07', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00028', 'M00028', 'CMP00008', TO_DATE('2025-05-08', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00029', 'M00029', 'CMP00009', TO_DATE('2025-05-09', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00030', 'M00030', 'CMP00010', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00031', 'M00005', 'CMP00001', TO_DATE('2025-05-11', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00032', 'M00010', 'CMP00002', TO_DATE('2025-05-12', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00033', 'M00015', 'CMP00003', TO_DATE('2025-05-13', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00034', 'M00020', 'CMP00004', TO_DATE('2025-05-14', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00035', 'M00025', 'CMP00005', TO_DATE('2025-05-15', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00036', 'M00030', 'CMP00006', TO_DATE('2025-05-16', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00037', 'M00003', 'CMP00007', TO_DATE('2025-05-17', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00038', 'M00006', 'CMP00008', TO_DATE('2025-05-18', 'YYYY-MM-DD'), 'Y');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00039', 'M00009', 'CMP00009', TO_DATE('2025-05-19', 'YYYY-MM-DD'), 'N');
+INSERT INTO MemberCampaign (MemberCampaignId, MemberId, CampaignId, AssignedDate, IsUsed) VALUES ('MC00040', 'M00012', 'CMP00010', TO_DATE('2025-05-20', 'YYYY-MM-DD'), 'Y');
 
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00001', NULL, 'BB00002', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00002', NULL, 'BB00003', 112.62, TO_DATE('2025-03-27', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00003', NULL, 'BB00004', 6.00, TO_DATE('2025-03-10', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00004', NULL, 'BB00005', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00005', NULL, 'BB00006', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00006', NULL, 'BB00007', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00007', NULL, 'BB00008', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00008', NULL, 'BB00009', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00009', NULL, 'BB00010', 19.00, TO_DATE('2025-02-13', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00010', NULL, 'BB00012', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00011', NULL, 'BB00013', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00012', NULL, 'BB00014', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00013', NULL, 'BB00015', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00014', NULL, 'BB00017', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00015', NULL, 'BB00018', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00016', NULL, 'BB00021', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00017', NULL, 'BB00023', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00018', NULL, 'BB00025', 5.00, TO_DATE('2025-03-06', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00019', NULL, 'BB00026', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00020', NULL, 'BB00028', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00021', NULL, 'BB00030', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00022', NULL, 'BB00031', 86.00, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00023', NULL, 'BB00032', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00024', NULL, 'BB00033', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00025', NULL, 'BB00035', 5.00, TO_DATE('2025-03-19', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00026', NULL, 'BB00036', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00027', NULL, 'BB00037', 118.32, TO_DATE('2025-02-20', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00028', NULL, 'BB00039', 30.80, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00029', NULL, 'BB00041', 20.00, TO_DATE('2025-02-04', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00030', NULL, 'BB00044', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00031', NULL, 'BB00045', 6.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00032', NULL, 'BB00047', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00033', NULL, 'BB00049', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00034', NULL, 'BB00050', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00035', NULL, 'BB00053', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00036', NULL, 'BB00055', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00037', NULL, 'BB00057', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00038', NULL, 'BB00059', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00039', NULL, 'BB00060', 5.00, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00040', NULL, 'BB00061', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00041', NULL, 'BB00063', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00042', NULL, 'BB00064', 5.00, TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00043', NULL, 'BB00065', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00044', NULL, 'BB00067', 66.00, TO_DATE('2025-03-30', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00045', NULL, 'BB00068', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00046', NULL, 'BB00069', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00047', NULL, 'BB00071', 77.73, TO_DATE('2025-01-31', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00048', NULL, 'BB00072', 52.13, TO_DATE('2025-01-11', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00049', NULL, 'BB00074', 18.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00050', NULL, 'BB00075', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00051', NULL, 'BB00079', 24.00, TO_DATE('2025-03-23', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00052', NULL, 'BB00080', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00053', NULL, 'BB00081', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00054', NULL, 'BB00082', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00055', NULL, 'BB00084', 5.00, TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00056', NULL, 'BB00085', 7.00, TO_DATE('2025-03-14', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00057', NULL, 'BB00086', 42.57, TO_DATE('2025-03-18', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00058', NULL, 'BB00087', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00059', NULL, 'BB00090', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00060', NULL, 'BB00091', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00061', NULL, 'BB00092', 20.94, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00062', NULL, 'BB00093', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00063', NULL, 'BB00095', 5.00, TO_DATE('2025-01-13', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00064', NULL, 'BB00097', 42.57, TO_DATE('2025-02-27', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00065', NULL, 'BB00100', 64.00, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00066', NULL, 'BB00101', 22.88, TO_DATE('2025-01-28', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00067', NULL, 'BB00102', 5.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00068', NULL, 'BB00104', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00069', NULL, 'BB00105', 56.00, TO_DATE('2025-03-13', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00070', NULL, 'BB00106', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00071', NULL, 'BB00107', 55.00, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00072', NULL, 'BB00108', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00073', NULL, 'BB00111', 5.00, TO_DATE('2025-04-17', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00074', NULL, 'BB00113', 38.00, TO_DATE('2025-03-29', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00075', NULL, 'BB00115', 32.00, TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00076', NULL, 'BB00117', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00077', NULL, 'BB00118', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00078', NULL, 'BB00119', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00079', NULL, 'BB00120', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00080', NULL, 'BB00121', 141.46, TO_DATE('2025-04-21', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00081', NULL, 'BB00122', 24.00, TO_DATE('2025-03-11', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00082', NULL, 'BB00123', 16.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00083', NULL, 'BB00124', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00084', NULL, 'BB00126', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00085', NULL, 'BB00127', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00086', NULL, 'BB00128', 42.57, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00087', NULL, 'BB00129', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00088', NULL, 'BB00130', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00089', NULL, 'BB00132', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00090', NULL, 'BB00133', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00091', NULL, 'BB00134', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00092', NULL, 'BB00135', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00093', NULL, 'BB00136', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00094', NULL, 'BB00137', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00095', NULL, 'BB00139', 5.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00096', NULL, 'BB00140', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00097', NULL, 'BB00141', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00098', NULL, 'BB00142', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00099', NULL, 'BB00143', 5.00, TO_DATE('2025-02-13', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00100', NULL, 'BB00144', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00101', NULL, 'BB00145', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00102', NULL, 'BB00146', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00103', NULL, 'BB00147', 115.41, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00104', NULL, 'BB00148', 36.41, TO_DATE('2025-03-20', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00105', NULL, 'BB00150', 5.00, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00106', NULL, 'BB00152', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00107', NULL, 'BB00153', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00108', NULL, 'BB00155', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00109', NULL, 'BB00157', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00110', NULL, 'BB00159', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00111', NULL, 'BB00160', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00112', NULL, 'BB00161', 136.56, TO_DATE('2025-02-28', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00113', NULL, 'BB00163', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00114', NULL, 'BB00164', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00115', NULL, 'BB00165', 109.47, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00116', NULL, 'BB00168', 28.00, TO_DATE('2025-04-01', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00117', NULL, 'BB00169', 130.56, TO_DATE('2025-03-31', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00118', NULL, 'BB00173', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00119', NULL, 'BB00174', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00120', NULL, 'BB00175', 31.48, TO_DATE('2025-01-08', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00121', NULL, 'BB00176', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00122', NULL, 'BB00177', 82.57, TO_DATE('2025-01-13', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00123', NULL, 'BB00178', 5.00, TO_DATE('2025-03-16', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00124', NULL, 'BB00181', 31.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00125', NULL, 'BB00182', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00126', NULL, 'BB00184', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00127', NULL, 'BB00186', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00128', NULL, 'BB00187', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00129', NULL, 'BB00188', 5.00, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00130', NULL, 'BB00189', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00131', NULL, 'BB00190', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00132', NULL, 'BB00191', 40.00, TO_DATE('2025-03-11', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00133', NULL, 'BB00192', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00134', NULL, 'BB00194', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00135', NULL, 'BB00196', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00136', NULL, 'BB00197', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00137', NULL, 'BB00198', 82.57, TO_DATE('2025-04-23', 'YYYY-MM-DD'), 'Paid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00138', NULL, 'BB00199', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00139', NULL, 'BB00200', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00140', NULL, 'BB00201', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00141', NULL, 'BB00203', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00142', NULL, 'BB00204', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00143', NULL, 'BB00206', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00144', NULL, 'BB00207', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00145', NULL, 'BB00208', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00146', NULL, 'BB00209', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00147', NULL, 'BB00210', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00148', NULL, 'BB00211', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00149', NULL, 'BB00212', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00150', NULL, 'BB00214', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00151', NULL, 'BB00215', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00152', NULL, 'BB00216', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00153', NULL, 'BB00217', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00154', NULL, 'BB00218', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00155', NULL, 'BB00219', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00156', NULL, 'BB00220', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00157', NULL, 'BB00221', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00158', NULL, 'BB00222', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00159', NULL, 'BB00224', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00160', NULL, 'BB00225', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00161', NULL, 'BB00226', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00162', NULL, 'BB00227', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00163', NULL, 'BB00228', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00164', NULL, 'BB00230', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00165', NULL, 'BB00231', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00166', NULL, 'BB00232', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00167', NULL, 'BB00233', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00168', NULL, 'BB00235', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00169', NULL, 'BB00236', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00170', NULL, 'BB00237', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00171', NULL, 'BB00238', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00172', NULL, 'BB00239', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00173', NULL, 'BB00240', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00174', NULL, 'BB00241', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00175', NULL, 'BB00242', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00176', NULL, 'BB00244', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00177', NULL, 'BB00245', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00178', NULL, 'BB00246', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00179', NULL, 'BB00247', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00180', NULL, 'BB00248', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00181', NULL, 'BB00249', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00182', NULL, 'BB00250', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00183', NULL, 'BB00251', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00184', NULL, 'BB00252', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00185', NULL, 'BB00253', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00186', NULL, 'BB00254', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00187', NULL, 'BB00255', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00188', NULL, 'BB00256', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00189', NULL, 'BB00257', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00190', NULL, 'BB00259', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00191', NULL, 'BB00260', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00192', NULL, 'BB00261', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00193', NULL, 'BB00262', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00194', NULL, 'BB00263', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00195', NULL, 'BB00264', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00196', NULL, 'BB00266', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00197', NULL, 'BB00268', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00198', NULL, 'BB00269', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00199', NULL, 'BB00270', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00200', NULL, 'BB00271', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00201', NULL, 'BB00272', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00202', NULL, 'BB00273', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00203', NULL, 'BB00275', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00204', NULL, 'BB00276', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00205', NULL, 'BB00277', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00206', NULL, 'BB00278', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00207', NULL, 'BB00279', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00208', NULL, 'BB00280', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00209', NULL, 'BB00281', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00210', NULL, 'BB00282', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00211', NULL, 'BB00283', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00212', NULL, 'BB00285', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00213', NULL, 'BB00286', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00214', NULL, 'BB00287', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00215', NULL, 'BB00288', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00216', NULL, 'BB00289', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00217', NULL, 'BB00290', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00218', NULL, 'BB00291', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00219', NULL, 'BB00292', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00220', NULL, 'BB00293', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00221', NULL, 'BB00294', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00222', NULL, 'BB00295', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00223', NULL, 'BB00296', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00224', NULL, 'BB00297', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00225', NULL, 'BB00298', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00226', NULL, 'BB00299', NULL, NULL, 'Unpaid');
-INSERT INTO Fine (FineID, CampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00227', NULL, 'BB00300', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00001', NULL, 'BB00002', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00002', 'MC00022', 'BB00003', 112.62, TO_DATE('2025-03-27', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00003', NULL, 'BB00004', 6.00, TO_DATE('2025-03-10', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00004', NULL, 'BB00005', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00005', NULL, 'BB00006', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00006', NULL, 'BB00007', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00007', NULL, 'BB00008', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00008', NULL, 'BB00009', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00009', NULL, 'BB00010', 19.00, TO_DATE('2025-02-13', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00010', NULL, 'BB00012', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00011', NULL, 'BB00013', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00012', NULL, 'BB00014', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00013', NULL, 'BB00015', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00014', NULL, 'BB00017', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00015', NULL, 'BB00018', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00016', NULL, 'BB00021', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00017', NULL, 'BB00023', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00018', NULL, 'BB00025', 5.00, TO_DATE('2025-03-06', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00019', NULL, 'BB00026', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00020', NULL, 'BB00028', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00021', NULL, 'BB00030', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00022', NULL, 'BB00031', 86.00, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00023', NULL, 'BB00032', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00024', NULL, 'BB00033', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00025', NULL, 'BB00035', 5.00, TO_DATE('2025-03-19', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00026', NULL, 'BB00036', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00027', NULL, 'BB00037', 118.32, TO_DATE('2025-02-20', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00028', NULL, 'BB00039', 30.80, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00029', NULL, 'BB00041', 20.00, TO_DATE('2025-02-04', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00030', NULL, 'BB00044', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00031', NULL, 'BB00045', 6.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00032', NULL, 'BB00047', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00033', NULL, 'BB00049', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00034', NULL, 'BB00050', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00035', NULL, 'BB00053', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00036', NULL, 'BB00055', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00037', NULL, 'BB00057', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00038', NULL, 'BB00059', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00039', NULL, 'BB00060', 5.00, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00040', NULL, 'BB00061', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00041', NULL, 'BB00063', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00042', NULL, 'BB00064', 5.00, TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00043', NULL, 'BB00065', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00044', NULL, 'BB00067', 66.00, TO_DATE('2025-03-30', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00045', NULL, 'BB00068', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00046', NULL, 'BB00069', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00047', NULL, 'BB00071', 77.73, TO_DATE('2025-01-31', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00048', NULL, 'BB00072', 52.13, TO_DATE('2025-01-11', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00049', NULL, 'BB00074', 18.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00050', NULL, 'BB00075', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00051', NULL, 'BB00079', 24.00, TO_DATE('2025-03-23', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00052', NULL, 'BB00080', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00053', NULL, 'BB00081', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00054', NULL, 'BB00082', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00055', NULL, 'BB00084', 5.00, TO_DATE('2025-04-19', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00056', NULL, 'BB00085', 7.00, TO_DATE('2025-03-14', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00057', NULL, 'BB00086', 42.57, TO_DATE('2025-03-18', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00058', NULL, 'BB00087', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00059', NULL, 'BB00090', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00060', NULL, 'BB00091', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00061', NULL, 'BB00092', 20.94, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00062', NULL, 'BB00093', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00063', NULL, 'BB00095', 5.00, TO_DATE('2025-01-13', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00064', NULL, 'BB00097', 42.57, TO_DATE('2025-02-27', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00065', NULL, 'BB00100', 64.00, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00066', NULL, 'BB00101', 22.88, TO_DATE('2025-01-28', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00067', NULL, 'BB00102', 5.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00068', NULL, 'BB00104', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00069', NULL, 'BB00105', 56.00, TO_DATE('2025-03-13', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00070', NULL, 'BB00106', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00071', NULL, 'BB00107', 55.00, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00072', NULL, 'BB00108', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00073', NULL, 'BB00111', 5.00, TO_DATE('2025-04-17', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00074', NULL, 'BB00113', 38.00, TO_DATE('2025-03-29', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00075', NULL, 'BB00115', 32.00, TO_DATE('2025-03-08', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00076', NULL, 'BB00117', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00077', NULL, 'BB00118', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00078', NULL, 'BB00119', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00079', NULL, 'BB00120', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00080', NULL, 'BB00121', 141.46, TO_DATE('2025-04-21', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00081', NULL, 'BB00122', 24.00, TO_DATE('2025-03-11', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00082', NULL, 'BB00123', 16.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00083', NULL, 'BB00124', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00084', NULL, 'BB00126', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00085', NULL, 'BB00127', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00086', NULL, 'BB00128', 42.57, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00087', NULL, 'BB00129', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00088', NULL, 'BB00130', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00089', NULL, 'BB00132', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00090', NULL, 'BB00133', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00091', NULL, 'BB00134', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00092', NULL, 'BB00135', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00093', NULL, 'BB00136', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00094', NULL, 'BB00137', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00095', NULL, 'BB00139', 5.00, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00096', NULL, 'BB00140', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00097', NULL, 'BB00141', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00098', NULL, 'BB00142', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00099', NULL, 'BB00143', 5.00, TO_DATE('2025-02-13', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00100', NULL, 'BB00144', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00101', NULL, 'BB00145', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00102', NULL, 'BB00146', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00103', NULL, 'BB00147', 115.41, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00104', NULL, 'BB00148', 36.41, TO_DATE('2025-03-20', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00105', NULL, 'BB00150', 5.00, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00106', NULL, 'BB00152', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00107', NULL, 'BB00153', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00108', NULL, 'BB00155', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00109', NULL, 'BB00157', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00110', NULL, 'BB00159', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00111', NULL, 'BB00160', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00112', NULL, 'BB00161', 136.56, TO_DATE('2025-02-28', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00113', NULL, 'BB00163', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00114', NULL, 'BB00164', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00115', NULL, 'BB00165', 109.47, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00116', NULL, 'BB00168', 28.00, TO_DATE('2025-04-01', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00117', NULL, 'BB00169', 130.56, TO_DATE('2025-03-31', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00118', NULL, 'BB00173', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00119', NULL, 'BB00174', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00120', NULL, 'BB00175', 31.48, TO_DATE('2025-01-08', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00121', NULL, 'BB00176', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00122', NULL, 'BB00177', 82.57, TO_DATE('2025-01-13', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00123', NULL, 'BB00178', 5.00, TO_DATE('2025-03-16', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00124', NULL, 'BB00181', 31.00, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00125', NULL, 'BB00182', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00126', NULL, 'BB00184', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00127', NULL, 'BB00186', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00128', NULL, 'BB00187', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00129', NULL, 'BB00188', 5.00, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00130', NULL, 'BB00189', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00131', NULL, 'BB00190', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00132', NULL, 'BB00191', 40.00, TO_DATE('2025-03-11', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00133', NULL, 'BB00192', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00134', NULL, 'BB00194', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00135', NULL, 'BB00196', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00136', NULL, 'BB00197', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00137', NULL, 'BB00198', 82.57, TO_DATE('2025-04-23', 'YYYY-MM-DD'), 'Paid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00138', NULL, 'BB00199', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00139', NULL, 'BB00200', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00140', NULL, 'BB00201', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00141', NULL, 'BB00203', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00142', NULL, 'BB00204', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00143', NULL, 'BB00206', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00144', NULL, 'BB00207', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00145', NULL, 'BB00208', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00146', NULL, 'BB00209', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00147', NULL, 'BB00210', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00148', NULL, 'BB00211', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00149', NULL, 'BB00212', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00150', NULL, 'BB00214', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00151', NULL, 'BB00215', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00152', NULL, 'BB00216', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00153', NULL, 'BB00217', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00154', NULL, 'BB00218', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00155', NULL, 'BB00219', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00156', NULL, 'BB00220', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00157', NULL, 'BB00221', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00158', NULL, 'BB00222', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00159', NULL, 'BB00224', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00160', NULL, 'BB00225', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00161', NULL, 'BB00226', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00162', NULL, 'BB00227', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00163', NULL, 'BB00228', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00164', NULL, 'BB00230', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00165', NULL, 'BB00231', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00166', NULL, 'BB00232', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00167', NULL, 'BB00233', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00168', NULL, 'BB00235', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00169', NULL, 'BB00236', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00170', NULL, 'BB00237', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00171', NULL, 'BB00238', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00172', NULL, 'BB00239', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00173', NULL, 'BB00240', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00174', NULL, 'BB00241', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00175', NULL, 'BB00242', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00176', NULL, 'BB00244', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00177', NULL, 'BB00245', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00178', NULL, 'BB00246', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00179', NULL, 'BB00247', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00180', NULL, 'BB00248', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00181', NULL, 'BB00249', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00182', NULL, 'BB00250', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00183', NULL, 'BB00251', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00184', NULL, 'BB00252', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00185', NULL, 'BB00253', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00186', NULL, 'BB00254', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00187', NULL, 'BB00255', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00188', NULL, 'BB00256', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00189', NULL, 'BB00257', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00190', NULL, 'BB00259', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00191', NULL, 'BB00260', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00192', NULL, 'BB00261', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00193', NULL, 'BB00262', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00194', NULL, 'BB00263', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00195', NULL, 'BB00264', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00196', NULL, 'BB00266', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00197', NULL, 'BB00268', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00198', NULL, 'BB00269', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00199', NULL, 'BB00270', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00200', NULL, 'BB00271', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00201', NULL, 'BB00272', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00202', NULL, 'BB00273', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00203', NULL, 'BB00275', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00204', NULL, 'BB00276', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00205', NULL, 'BB00277', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00206', NULL, 'BB00278', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00207', NULL, 'BB00279', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00208', NULL, 'BB00280', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00209', NULL, 'BB00281', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00210', NULL, 'BB00282', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00211', NULL, 'BB00283', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00212', NULL, 'BB00285', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00213', NULL, 'BB00286', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00214', NULL, 'BB00287', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00215', NULL, 'BB00288', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00216', NULL, 'BB00289', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00217', NULL, 'BB00290', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00218', NULL, 'BB00291', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00219', NULL, 'BB00292', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00220', NULL, 'BB00293', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00221', NULL, 'BB00294', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00222', NULL, 'BB00295', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00223', NULL, 'BB00296', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00224', NULL, 'BB00297', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00225', NULL, 'BB00298', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00226', NULL, 'BB00299', NULL, NULL, 'Unpaid');
+INSERT INTO Fine (FineID, MemberCampaignID, BorrowBookID, Amount, PaymentDate, FineStatus) VALUES ('F00227', NULL, 'BB00300', NULL, NULL, 'Unpaid');
 
 
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00001', 'F00001', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 6.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00001', 'F00001', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 6.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00002', 'F00002', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 8.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00003', 'F00003', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 8.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00003', 'F00003', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 8.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00004', 'F00004', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 9.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00004', 'F00004', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 9.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00005', 'F00005', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 11.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00006', 'F00006', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 11.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00006', 'F00006', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 11.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00007', 'F00007', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 12.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00007', 'F00007', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 12.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00008', 'F00008', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 14.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00009', 'F00009', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 14.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00009', 'F00009', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 14.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00010', 'F00010', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 15.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00011', 'F00011', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00011', 'F00011', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00012', 'F00012', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 17.0, TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00013', 'F00013', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 18.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00013', 'F00013', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 18.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00014', 'F00014', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 20.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00015', 'F00015', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 20.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00015', 'F00015', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 20.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00016', 'F00016', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 21.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00016', 'F00016', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 21.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00017', 'F00017', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 23.5, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00018', 'F00018', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 23.0, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00018', 'F00018', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 23.0, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00019', 'F00019', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 24.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00019', 'F00019', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 24.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00020', 'F00020', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.5, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00020', 'F00020', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.5, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00021', 'F00021', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 26.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00021', 'F00021', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 26.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00022', 'F00022', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 27.75, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -1530,13 +1597,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00023', 'F00023', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 29.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00024', 'F00024', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 29.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00024', 'F00024', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 29.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00025', 'F00025', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 30.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00025', 'F00025', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 30.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00026', 'F00026', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00026', 'F00026', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00027', 'F00027', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 32.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -1548,22 +1615,22 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00029', 'F00029', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 35.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00030', 'F00030', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00030', 'F00030', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00031', 'F00031', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 36.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00031', 'F00031', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 36.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00032', 'F00032', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00033', 'F00033', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 38.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00033', 'F00033', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 38.0, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00034', 'F00034', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 39.75, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00034', 'F00034', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 39.75, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00035', 'F00035', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 41.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00035', 'F00035', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 41.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00036', 'F00036', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 41.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -1575,7 +1642,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00038', 'F00038', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.5, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00039', 'F00039', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.0, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00039', 'F00039', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 44.0, TO_DATE('2025-04-16', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00040', 'F00040', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 45.75, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1584,19 +1651,19 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00041', 'F00041', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 47.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00042', 'F00042', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 47.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00042', 'F00042', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 47.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00043', 'F00043', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 48.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00043', 'F00043', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 48.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00044', 'F00044', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 50.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00044', 'F00044', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 50.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00045', 'F00045', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 50.0, TO_DATE('2025-04-15', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00046', 'F00046', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 5.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00046', 'F00046', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 5.75, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00047', 'F00047', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 7.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1611,7 +1678,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00050', 'F00050', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 10.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00051', 'F00051', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 10.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00051', 'F00051', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 10.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00052', 'F00052', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 11.75, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1620,7 +1687,7 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00053', 'F00053', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00054', 'F00054', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00054', 'F00054', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 13.0, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00055', 'F00055', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 14.75, TO_DATE('2025-04-03', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
@@ -1632,19 +1699,19 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00057', 'F00057', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 16.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00058', 'F00058', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00058', 'F00058', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 17.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00059', 'F00059', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 19.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00059', 'F00059', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 19.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00060', 'F00060', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 19.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00060', 'F00060', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 19.0, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00061', 'F00061', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 20.75, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00061', 'F00061', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 20.75, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00062', 'F00062', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 22.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00062', 'F00062', TO_DATE('2025-04-11', 'YYYY-MM-DD'), 22.5, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00063', 'F00063', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 22.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1653,13 +1720,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00064', 'F00064', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 23.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00065', 'F00065', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 25.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00065', 'F00065', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 25.5, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00066', 'F00066', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 25.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00067', 'F00067', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00067', 'F00067', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 26.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00068', 'F00068', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 28.5, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1671,13 +1738,13 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00070', 'F00070', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 29.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00071', 'F00071', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 31.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00071', 'F00071', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 31.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00072', 'F00072', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 31.0, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00073', 'F00073', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00073', 'F00073', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 32.75, TO_DATE('2025-04-02', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00074', 'F00074', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 34.5, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
@@ -1686,83 +1753,79 @@ INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentM
 VALUES ('INV00075', 'F00075', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 34.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00076', 'F00076', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
+VALUES ('INV00076', 'F00076', TO_DATE('2025-04-07', 'YYYY-MM-DD'), 35.75, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00077', 'F00077', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 37.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00077', 'F00077', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 37.5, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00078', 'F00078', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 37.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00078', 'F00078', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 37.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00079', 'F00079', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00079', 'F00079', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 38.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00080', 'F00080', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 40.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00080', 'F00080', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 40.5, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00081', 'F00081', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 40.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00082', 'F00082', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 41.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00082', 'F00082', TO_DATE('2025-04-02', 'YYYY-MM-DD'), 41.75, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00083', 'F00083', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 43.5, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00084', 'F00084', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 43.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00084', 'F00084', TO_DATE('2025-04-03', 'YYYY-MM-DD'), 43.0, TO_DATE('2025-04-05', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00085', 'F00085', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 44.75, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00086', 'F00086', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 46.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00086', 'F00086', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 46.5, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00087', 'F00087', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 46.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00087', 'F00087', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 46.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00088', 'F00088', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 47.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00089', 'F00089', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 49.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Paid in full');
+VALUES ('INV00089', 'F00089', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 49.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00090', 'F00090', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 49.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00090', 'F00090', TO_DATE('2025-04-10', 'YYYY-MM-DD'), 49.0, TO_DATE('2025-04-12', 'YYYY-MM-DD'), 'Cash', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00091', 'F00091', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 50.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00091', 'F00091', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 50.75, TO_DATE('2025-04-10', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00092', 'F00092', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 6.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Late fee payment');
+VALUES ('INV00092', 'F00092', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 6.5, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Online', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00093', 'F00093', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 6.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00093', 'F00093', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 6.0, TO_DATE('2025-04-07', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00094', 'F00094', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 7.75, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Paid in full');
+VALUES ('INV00094', 'F00094', TO_DATE('2025-04-04', 'YYYY-MM-DD'), 7.75, TO_DATE('2025-04-08', 'YYYY-MM-DD'), 'Cash', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00095', 'F00095', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 9.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
+VALUES ('INV00095', 'F00095', TO_DATE('2025-04-05', 'YYYY-MM-DD'), 9.5, TO_DATE('2025-04-06', 'YYYY-MM-DD'), 'Card', 'Damaged Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00096', 'F00096', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 9.0, TO_DATE('2025-04-13', 'YYYY-MM-DD'), 'Cash', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00097', 'F00097', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 10.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00097', 'F00097', TO_DATE('2025-04-06', 'YYYY-MM-DD'), 10.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
-VALUES ('INV00098', 'F00098', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 12.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Paid in full');
+VALUES ('INV00098', 'F00098', TO_DATE('2025-04-01', 'YYYY-MM-DD'), 12.5, TO_DATE('2025-04-04', 'YYYY-MM-DD'), 'Card', 'Lost Fee Payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00099', 'F00099', TO_DATE('2025-04-09', 'YYYY-MM-DD'), 12.0, TO_DATE('2025-04-09', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
 
 INSERT INTO Invoice (InvoiceID, FineID, IssueDate, Amount, PaymentDate, PaymentMethod, Remark)
 VALUES ('INV00100', 'F00100', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 13.75, TO_DATE('2025-04-11', 'YYYY-MM-DD'), 'Card', 'Late fee payment');
-
-
-
-
 
 
 
@@ -1831,6 +1894,7 @@ INSERT INTO BookGenre (ISBN, GenreID) VALUES ('978960126264520', 'G00001');
 INSERT INTO BookGenre (ISBN, GenreID) VALUES ('978100849738142', 'G00005');
 INSERT INTO BookGenre (ISBN, GenreID) VALUES ('978344477681286', 'G00004');
 INSERT INTO BookGenre (ISBN, GenreID) VALUES ('978802533807786', 'G00001');
+
 
 
 
