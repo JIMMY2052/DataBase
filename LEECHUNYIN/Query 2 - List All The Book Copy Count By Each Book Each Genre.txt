@@ -1,0 +1,29 @@
+SET PAGESIZE 200
+SET LINESIZE 400
+SET NEWPAGE 2
+
+TTITLE OFF
+CLEAR BREAKS
+CLEAR COMPUTES
+
+COLUMN GenreName FORMAT A20
+COLUMN BOOKTITLE FORMAT A35
+COLUMN BookCopyCount FORMAT 999
+
+BREAK ON GenreName PAGE ON REPORT
+
+COMPUTE SUM LABEL 'Total' OF BookCopyCount ON GenreName
+
+SELECT 
+    g.GenreName,
+    b.Title AS BOOKTITLE,
+    COUNT(bc.BookCopyID) AS BookCopyCount
+FROM 
+    Genre g
+JOIN BookGenre bg ON g.GenreID = bg.GenreID
+JOIN Book b ON bg.ISBN = b.ISBN
+JOIN BookCopy bc ON b.ISBN = bc.ISBN
+GROUP BY 
+    g.GenreName, b.Title
+ORDER BY 
+    g.GenreName, b.Title;

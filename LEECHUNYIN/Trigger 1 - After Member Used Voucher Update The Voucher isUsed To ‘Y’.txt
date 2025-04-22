@@ -1,0 +1,23 @@
+CREATE OR REPLACE TRIGGER trg_MarkVoucherAsUsed
+AFTER UPDATE OF FineStatus ON Fine
+FOR EACH ROW
+WHEN (NEW.FineStatus = 'Paid' AND OLD.FineStatus <> 'Paid')
+DECLARE
+    v_MemberID Member.MemberID%TYPE;
+    v_CampaignID MemberCampaign.CampaignID%TYPE;
+BEGIN
+    SELECT MemberID INTO v_MemberID
+    FROM BorrowBook
+    WHERE BorrowBookID = :NEW.BorrowBookID;
+
+    SELECT CampaignID INTO v_CampaignID
+    FROM MemberCampaign
+    WHERE MemberID = v_MemberID
+    AND isUsed = 'N' 
+    AND ROWNUM = 1;  
+
+    UPDATE MemberCampaign
+    SET isUsed = 'Y'
+    WHERE CampaignID = v_CampaignID AND MemberID = v_MemberID;
+END;
+/

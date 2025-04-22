@@ -1,0 +1,98 @@
+CREATE OR REPLACE PROCEDURE Rpt_CampaignEff_Insight AS
+    -- Cursor to get all distinct campaign types
+    CURSOR campaign_type_cur IS
+        SELECT DISTINCT CampaignType FROM Campaign ORDER BY CampaignType;
+
+    -- Cursor to get campaigns by type
+    CURSOR campaign_cur(p_type VARCHAR2) IS
+        SELECT CampaignID, CampaignName
+        FROM Campaign
+        WHERE CampaignType = p_type;
+
+    -- Voucher usage cursor
+    CURSOR voucher_cur(p_CampaignID Campaign.CampaignID%TYPE) IS
+        SELECT 
+            COUNT(*) AS TotalAssigned,
+            SUM(CASE WHEN isUsed = 'Y' THEN 1 ELSE 0 END) AS TotalUsed
+        FROM MemberCampaign
+        WHERE CampaignID = p_CampaignID;
+
+    -- Fine waived cursor
+    CURSOR fine_waived_cur(p_CampaignID Campaign.CampaignID%TYPE) IS
+        SELECT SUM(f.Amount) AS TotalWaived
+        FROM Fine f
+        JOIN MemberCampaign mc ON f.MemberCampaignID = mc.MemberCampaignID
+        WHERE mc.CampaignID = p_CampaignID
+          AND mc.isUsed = 'Y'
+          AND f.FineStatus = 'Paid';
+
+    -- Variables
+    v_type Campaign.CampaignType%TYPE;
+    v_CampaignID Campaign.CampaignID%TYPE;
+    v_CampaignName Campaign.CampaignName%TYPE;
+    v_TotalAssigned NUMBER := 0;
+    v_TotalUsed NUMBER := 0;
+    v_Effectiveness NUMBER := 0;
+    v_TotalWaived NUMBER := 0;
+
+    -- Summary
+    v_TotalCampaigns NUMBER := 0;
+    v_SumEffectiveness NUMBER := 0;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('=== Campaign Effectiveness & Waived Fine Report by Type ===');
+
+    OPEN campaign_type_cur;
+    LOOP
+        FETCH campaign_type_cur INTO v_type;
+        EXIT WHEN campaign_type_cur%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(CHR(10) || '--- Campaign Type: ' || v_type || ' ---');
+        DBMS_OUTPUT.PUT_LINE(RPAD('Campaign ID', 12) || RPAD('Name', 40) || RPAD('Assigned', 15) || RPAD('Used', 15) || RPAD('Effectiveness', 15) || 'Total Waived (RM)');
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 120, '-'));
+
+        OPEN campaign_cur(v_type);
+        LOOP
+            FETCH campaign_cur INTO v_CampaignID, v_CampaignName;
+            EXIT WHEN campaign_cur%NOTFOUND;
+
+            OPEN voucher_cur(v_CampaignID);
+            FETCH voucher_cur INTO v_TotalAssigned, v_TotalUsed;
+            CLOSE voucher_cur;
+
+            OPEN fine_waived_cur(v_CampaignID);
+            FETCH fine_waived_cur INTO v_TotalWaived;
+            CLOSE fine_waived_cur;
+
+            v_Effectiveness := 0;
+            IF v_TotalAssigned > 0 THEN
+                v_Effectiveness := ROUND((v_TotalUsed / v_TotalAssigned) * 100, 2);
+                DBMS_OUTPUT.PUT_LINE(
+                    RPAD(v_CampaignID, 12) ||
+                    RPAD(v_CampaignName, 40) ||
+                    RPAD(v_TotalAssigned, 15) ||
+                    RPAD(v_TotalUsed, 15) ||
+                    RPAD(TO_CHAR(v_Effectiveness, '990.00') || '%', 15) ||
+                    NVL(TO_CHAR(v_TotalWaived, '9990.00'), '0.00')
+                );
+                v_TotalCampaigns := v_TotalCampaigns + 1;
+                v_SumEffectiveness := v_SumEffectiveness + v_Effectiveness;
+            ELSE
+                DBMS_OUTPUT.PUT_LINE(RPAD(v_CampaignID, 12) || RPAD(v_CampaignName, 40) || 'No vouchers assigned.');
+            END IF;
+        END LOOP;
+        CLOSE campaign_cur;
+    END LOOP;
+    CLOSE campaign_type_cur;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || '=== Overall Campaign Summary ===');
+    DBMS_OUTPUT.PUT_LINE('Total Campaigns Evaluated: ' || v_TotalCampaigns);
+    IF v_TotalCampaigns > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Average Effectiveness: ' || TO_CHAR(ROUND(v_SumEffectiveness / v_TotalCampaigns, 2), '90.00') || '%');
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/

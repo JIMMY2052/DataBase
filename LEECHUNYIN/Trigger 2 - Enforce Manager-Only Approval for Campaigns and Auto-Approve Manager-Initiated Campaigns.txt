@@ -1,0 +1,29 @@
+CREATE OR REPLACE TRIGGER trg_CampaignApprovalByManager
+BEFORE INSERT OR UPDATE ON Campaign
+FOR EACH ROW
+DECLARE
+    v_CreatorRole Staff.Role%TYPE;
+    v_ApproverRole Staff.Role%TYPE;
+BEGIN
+
+    SELECT Role INTO v_CreatorRole
+    FROM Staff
+    WHERE StaffID = :NEW.StaffID;
+
+    IF INSERTING AND v_CreatorRole = 'Manager' THEN
+        :NEW.ApprovalStatus := 'Approved';
+        :NEW.ApprovedByStaffID := :NEW.StaffID;
+        :NEW.ApprovalDate := SYSDATE;
+    END IF;
+
+    IF UPDATING AND :NEW.ApprovalStatus = 'Approved' THEN
+        SELECT Role INTO v_ApproverRole
+        FROM Staff
+        WHERE StaffID = :NEW.ApprovedByStaffID;
+
+        IF v_ApproverRole != 'Manager' THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Only Managers are allowed to approve campaigns.');
+        END IF;
+    END IF;
+END;
+/

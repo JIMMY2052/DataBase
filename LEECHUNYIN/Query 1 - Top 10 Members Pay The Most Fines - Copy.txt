@@ -1,0 +1,36 @@
+SET PAGESIZE 100
+SET LINESIZE 74
+
+COLUMN memberId FORMAT A8
+COLUMN email FORMAT A23
+COLUMN phoneNumber FORMAT A13
+COLUMN status FORMAT A10
+COLUMN totalFineAmount FORMAT 9,999.99
+
+TTITLE CENTER 'TOP 10 MEMBERS WITH THE HIGHEST FINES PAID' SKIP 2
+
+BREAK ON REPORT
+COMPUTE SUM LABEL 'TOTAL' OF totalFineAmount ON REPORT
+
+SELECT *
+FROM (
+  SELECT 
+    m.memberId, 
+    m.email, 
+    m.phoneNumber, 
+    m.status, 
+    SUM(f.amount) AS totalFineAmount
+  FROM 
+    member m
+  JOIN 
+    borrowbook bb ON m.memberId = bb.memberId
+  JOIN 
+    fine f ON bb.borrowBookId = f.borrowBookId
+  GROUP BY 
+    m.memberId, m.email, m.phoneNumber, m.status
+  HAVING 
+    SUM(NVL(f.amount, 0)) > 0
+  ORDER BY 
+    totalFineAmount DESC
+)
+WHERE ROWNUM <= 10;

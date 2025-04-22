@@ -1,0 +1,220 @@
+CREATE OR REPLACE PROCEDURE Generate_Fines_Summary_Report AS
+    -- Cursors
+    CURSOR remark_cursor IS
+        SELECT DISTINCT i.Remark
+        FROM Invoice i
+        JOIN Fine f ON i.FineID = f.FineID
+        ORDER BY i.Remark;
+
+    CURSOR detail_cursor(p_Remark VARCHAR2) IS
+        SELECT i.InvoiceID, i.Amount
+        FROM Invoice i
+        JOIN Fine f ON i.FineID = f.FineID
+        WHERE i.Remark = p_Remark;
+
+    CURSOR invoice_summary_cursor IS
+        SELECT i.PaymentMethod, COUNT(*) AS Count, SUM(i.Amount) AS Total
+        FROM Invoice i
+        GROUP BY i.PaymentMethod
+        ORDER BY i.PaymentMethod;
+
+    CURSOR paid_unpaid_cursor IS
+        SELECT f.FineStatus, COUNT(*) AS Count, SUM(i.Amount) AS Total
+        FROM Fine f
+        JOIN Invoice i ON f.FineID = i.FineID
+        GROUP BY f.FineStatus
+        ORDER BY f.FineStatus;
+
+    -- Variables
+    v_remark           VARCHAR2(100);
+    v_invoice_id       VARCHAR2(10);
+    v_invoice_amount   NUMBER(10,2);
+
+    v_payment_method   VARCHAR2(20);
+    v_payment_count    NUMBER;
+    v_payment_total    NUMBER(10,2);
+
+    v_fine_status      VARCHAR2(15);
+    v_status_count     NUMBER;
+    v_status_total     NUMBER(10,2);
+
+    v_case_count       NUMBER;
+    v_total_amount     NUMBER(10,2);
+    v_grand_total_amt  NUMBER := 0;
+    v_total_fines      NUMBER := 0;
+    v_payment_grand    NUMBER := 0;
+    v_status_grand     NUMBER := 0;
+
+    -- Flags
+    v_found_remark     BOOLEAN := FALSE;
+    v_found_invoice    BOOLEAN := FALSE;
+    v_found_status     BOOLEAN := FALSE;
+
+    -- Custom exceptions
+    ex_no_remarks      EXCEPTION;
+    ex_no_invoice_sum  EXCEPTION;
+    ex_no_fine_status  EXCEPTION;
+
+    -- Formatting constants
+    c_line            CONSTANT VARCHAR2(120) := LPAD('=', 120, '=');
+    c_subline         CONSTANT VARCHAR2(120) := LPAD('-', 120, '-');
+    c_col1_width      CONSTANT NUMBER := 30;
+    c_col2_width      CONSTANT NUMBER := 15;
+    c_col3_width      CONSTANT NUMBER := 20;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(c_line);
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || LPAD('FINE SUMMARY REPORT', 60));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+    DBMS_OUTPUT.PUT_LINE('Generated on: ' || TO_CHAR(SYSDATE, 'DD-MON-YYYY HH24:MI:SS'));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+
+    -- Pre-count total fines
+    OPEN remark_cursor;
+    LOOP
+        FETCH remark_cursor INTO v_remark;
+        EXIT WHEN remark_cursor%NOTFOUND;
+
+        v_case_count := 0;
+        OPEN detail_cursor(v_remark);
+        LOOP
+            FETCH detail_cursor INTO v_invoice_id, v_invoice_amount;
+            EXIT WHEN detail_cursor%NOTFOUND;
+            v_case_count := v_case_count + 1;
+        END LOOP;
+        CLOSE detail_cursor;
+
+        v_total_fines := v_total_fines + v_case_count;
+    END LOOP;
+    CLOSE remark_cursor;
+
+    -- === Fine Details ===
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || LPAD('FINE DETAILS BY REMARK', 60));
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('REMARK', c_col1_width) || RPAD('CASES', c_col2_width) || RPAD('TOTAL AMOUNT (RM)', c_col3_width) || 'DISTRIBUTION');
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+
+    OPEN remark_cursor;
+    LOOP
+        FETCH remark_cursor INTO v_remark;
+        EXIT WHEN remark_cursor%NOTFOUND;
+        v_found_remark := TRUE;
+
+        v_case_count := 0;
+        v_total_amount := 0;
+
+        OPEN detail_cursor(v_remark);
+        LOOP
+            FETCH detail_cursor INTO v_invoice_id, v_invoice_amount;
+            EXIT WHEN detail_cursor%NOTFOUND;
+            v_case_count := v_case_count + 1;
+            v_total_amount := v_total_amount + NVL(v_invoice_amount, 0);
+        END LOOP;
+        CLOSE detail_cursor;
+
+        DECLARE v_percent NUMBER;
+        BEGIN
+            v_percent := CASE WHEN v_total_fines > 0 THEN ROUND(v_case_count / v_total_fines * 100, 2) ELSE 0 END;
+
+            DBMS_OUTPUT.PUT_LINE(
+                RPAD(v_remark, c_col1_width) || 
+                RPAD(v_case_count, c_col2_width) || 
+                RPAD(TO_CHAR(v_total_amount, '9,999,990.00'), c_col3_width) ||
+                TO_CHAR(v_percent, '990.00') || '% ' || RPAD('■', GREATEST(1, ROUND(v_percent / 2)), '■')
+            );
+        END;
+        v_grand_total_amt := v_grand_total_amt + v_total_amount;
+    END LOOP;
+    CLOSE remark_cursor;
+
+    IF NOT v_found_remark THEN
+        RAISE ex_no_remarks;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('TOTAL', c_col1_width) || RPAD(v_total_fines, c_col2_width) || RPAD(TO_CHAR(v_grand_total_amt, '9,999,990.00'), c_col3_width));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+
+    -- === Payment Method Summary ===
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || LPAD('PAYMENT METHOD SUMMARY', 60));
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('PAYMENT METHOD', c_col1_width) || RPAD('CASES', c_col2_width) || RPAD('TOTAL AMOUNT (RM)', c_col3_width) || 'DISTRIBUTION');
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+
+    OPEN invoice_summary_cursor;
+    LOOP
+        FETCH invoice_summary_cursor INTO v_payment_method, v_payment_count, v_payment_total;
+        EXIT WHEN invoice_summary_cursor%NOTFOUND;
+        v_found_invoice := TRUE;
+
+        DECLARE v_percent NUMBER;
+        BEGIN
+            v_percent := CASE WHEN v_total_fines > 0 THEN ROUND(v_payment_count / v_total_fines * 100, 2) ELSE 0 END;
+
+            DBMS_OUTPUT.PUT_LINE(
+                RPAD(v_payment_method, c_col1_width) || 
+                RPAD(v_payment_count, c_col2_width) || 
+                RPAD(TO_CHAR(v_payment_total, '9,999,990.00'), c_col3_width) ||
+                TO_CHAR(v_percent, '990.00') || '% ' || RPAD('■', GREATEST(1, ROUND(v_percent / 2)), '■')
+            );
+            v_payment_grand := v_payment_grand + v_payment_total;
+        END;
+    END LOOP;
+    CLOSE invoice_summary_cursor;
+
+    IF NOT v_found_invoice THEN
+        RAISE ex_no_invoice_sum;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('TOTAL', c_col1_width + c_col2_width) || TO_CHAR(v_payment_grand, '9,999,990.00'));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+
+    -- === Fine Status Summary ===
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || LPAD('FINE STATUS SUMMARY', 60));
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('STATUS', c_col1_width) || RPAD('COUNT', c_col2_width) || RPAD('TOTAL AMOUNT (RM)', c_col3_width) || 'DISTRIBUTION');
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+
+    OPEN paid_unpaid_cursor;
+    LOOP
+        FETCH paid_unpaid_cursor INTO v_fine_status, v_status_count, v_status_total;
+        EXIT WHEN paid_unpaid_cursor%NOTFOUND;
+        v_found_status := TRUE;
+
+        DECLARE v_percent NUMBER;
+        BEGIN
+            v_percent := CASE WHEN v_total_fines > 0 THEN ROUND(v_status_count / v_total_fines * 100, 2) ELSE 0 END;
+
+            DBMS_OUTPUT.PUT_LINE(
+                RPAD(v_fine_status, c_col1_width) || 
+                RPAD(v_status_count, c_col2_width) || 
+                RPAD(TO_CHAR(v_status_total, '9,999,990.00'), c_col3_width) ||
+                TO_CHAR(v_percent, '990.00') || '% ' || RPAD('■', GREATEST(1, ROUND(v_percent / 2)), '■')
+            );
+            v_status_grand := v_status_grand + v_status_total;
+        END;
+    END LOOP;
+    CLOSE paid_unpaid_cursor;
+
+    IF NOT v_found_status THEN
+        RAISE ex_no_fine_status;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(c_subline);
+    DBMS_OUTPUT.PUT_LINE(RPAD('TOTAL', c_col1_width + c_col2_width) || TO_CHAR(v_status_grand, '9,999,990.00'));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || LPAD('END OF REPORT', 60));
+    DBMS_OUTPUT.PUT_LINE(c_line);
+
+EXCEPTION
+    WHEN ex_no_remarks THEN
+        DBMS_OUTPUT.PUT_LINE('No fine/invoice remark records found.');
+    WHEN ex_no_invoice_sum THEN
+        DBMS_OUTPUT.PUT_LINE('No invoice records found.');
+    WHEN ex_no_fine_status THEN
+        DBMS_OUTPUT.PUT_LINE('No fine status records found.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Unexpected error: ' || SQLERRM);
+END;
+/

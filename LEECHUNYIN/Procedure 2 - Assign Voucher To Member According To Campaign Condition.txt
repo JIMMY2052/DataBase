@@ -1,0 +1,95 @@
+CREATE OR REPLACE PROCEDURE AssignVoucherDaily AS
+    CURSOR campaign_cursor IS
+        SELECT CampaignID, CampaignName, CampaignType, StartDate, EndDate, ApprovalStatus, Conditions
+        FROM Campaign 
+        WHERE ApprovalStatus = 'Approved'
+          AND (StartDate <= SYSDATE AND EndDate >= SYSDATE)
+        ORDER BY StartDate;
+
+    CURSOR member_cursor IS
+        SELECT MemberID
+        FROM Member
+        WHERE Status = 'Active';
+
+    v_CampaignID Campaign.CampaignID%TYPE;
+    v_CampaignName Campaign.CampaignName%TYPE;
+    v_CampaignType Campaign.CampaignType%TYPE;
+    v_StartDate Campaign.StartDate%TYPE;
+    v_EndDate Campaign.EndDate%TYPE;
+    v_CampaignApprovalStatus Campaign.ApprovalStatus%TYPE;
+    v_Conditions Campaign.Conditions%TYPE;
+    v_CurrentDate DATE := SYSDATE;
+
+    v_MemberID Member.MemberID%TYPE;
+
+    v_exists NUMBER;
+    v_BorrowedCount NUMBER;
+    v_RequiredCount NUMBER;
+    v_RequiredGenre VARCHAR2(100);
+
+    e_NoCampaigns EXCEPTION;
+BEGIN
+    OPEN campaign_cursor;
+    FETCH campaign_cursor INTO v_CampaignID, v_CampaignName, v_CampaignType, v_StartDate, v_EndDate, v_CampaignApprovalStatus, v_Conditions;
+
+    IF campaign_cursor%NOTFOUND THEN
+        RAISE e_NoCampaigns;
+    END IF;
+
+    LOOP
+        OPEN member_cursor;
+        LOOP
+            FETCH member_cursor INTO v_MemberID;
+            EXIT WHEN member_cursor%NOTFOUND;
+
+            SELECT COUNT(*) INTO v_exists
+            FROM MemberCampaign
+            WHERE MemberID = v_MemberID AND CampaignID = v_CampaignID;
+
+            IF v_exists = 0 THEN
+                IF v_CampaignType = 'Seasonal' THEN
+                    INSERT INTO MemberCampaign (MemberCampaignID, MemberID, CampaignID, AssignedDate)
+                    VALUES (
+                        'MC' || LPAD(member_campaign_seq.NEXTVAL, 5, '0'),
+                        v_MemberID, v_CampaignID, SYSDATE
+                    );
+
+                ELSIF v_CampaignType = 'Achievement' THEN
+                    SELECT TO_NUMBER(REGEXP_SUBSTR(v_Conditions, '[0-9]+')) INTO v_RequiredCount FROM dual;
+                    SELECT REGEXP_SUBSTR(v_Conditions, '[0-9]+ ([A-Za-z -]+) books', 1, 1, NULL, 1) INTO v_RequiredGenre FROM dual;
+
+                    SELECT COUNT(*)
+                    INTO v_BorrowedCount
+                    FROM BorrowBook bb
+                    JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+                    JOIN Book b ON bc.ISBN = b.ISBN
+                    JOIN BookGenre bg ON b.ISBN = bg.ISBN
+                    JOIN Genre g ON bg.GenreID = g.GenreID
+                    WHERE g.GenreName = v_RequiredGenre
+                      AND bb.MemberID = v_MemberID;
+
+                    IF v_BorrowedCount >= v_RequiredCount THEN
+                        INSERT INTO MemberCampaign (MemberCampaignID, MemberID, CampaignID, AssignedDate)
+                        VALUES (
+                            'MC' || LPAD(member_campaign_seq.NEXTVAL, 5, '0'),
+                            v_MemberID, v_CampaignID, SYSDATE
+                        );
+                    END IF;
+                END IF;
+            END IF;
+        END LOOP;
+        CLOSE member_cursor;
+
+        FETCH campaign_cursor INTO v_CampaignID, v_CampaignName, v_CampaignType, v_StartDate, v_EndDate, v_CampaignApprovalStatus, v_Conditions;
+        EXIT WHEN campaign_cursor%NOTFOUND;
+    END LOOP;
+
+    CLOSE campaign_cursor;
+
+EXCEPTION
+    WHEN e_NoCampaigns THEN
+        NULL; -- Silent handling when no campaigns found
+    WHEN OTHERS THEN
+        NULL; -- Silent handling for other errors
+END AssignVoucherDaily;
+/
