@@ -1,0 +1,53 @@
+assign 
+
+INSERT INTO Campaign (
+    CampaignID, StaffID, CampaignName, CampaignType, Description,
+    StartDate, EndDate, Conditions, DiscountPercentage,
+    ApprovalStatus, ApprovedByStaffID, ApprovalDate
+)
+VALUES (
+    'CMP00013', 'STF00005', 'Childrens Book Month1', 'Achievement', 'Read children books for rewards',
+    TO_DATE('2025-04-01', 'YYYY-MM-DD'), TO_DATE('2025-12-30', 'YYYY-MM-DD'),
+    'Borrow 1 Fiction books in a month', 15.00,
+    'Approved', 'STF00001', TO_DATE('2025-03-01', 'YYYY-MM-DD')
+);
+
+trigger1
+
+select * from fine where fineid = 'F00001';
+
+select * from borrowbook where borrowbookid = 'BB00002';
+
+select * from membercampaign where memberid = 'M00025';
+
+UPDATE Fine
+SET 
+    MemberCampaignID = 'MC00035',
+    FineStatus = 'Paid',
+    PaymentDate = CURRENT_DATE,
+    Amount = 15.00
+WHERE FineID = 'F00001';
+
+trigger2
+
+
+INSERT INTO Campaign (
+    CampaignID, StaffID, CampaignName, CampaignType, Description,
+    StartDate, EndDate, Conditions, DiscountPercentage,
+    ApprovalStatus, ApprovedByStaffID, ApprovalDate
+)
+VALUES (
+    'CMP00014', 'STF00004', 'Childrens Book Month2', 'Achievement', 'Read children books for rewards',
+    TO_DATE('2025-04-01', 'YYYY-MM-DD'), TO_DATE('2025-12-30', 'YYYY-MM-DD'),
+    'Borrow 1 Fiction books in a month', 15.00,
+    'Pending', null, null
+);
+
+
+UPDATE Campaign
+SET
+    ApprovalStatus = 'Approved',
+    ApprovedByStaffID = 'STF00010',
+    ApprovalDate = CURRENT_DATE
+WHERE CampaignID = 'CMP00010';
+
