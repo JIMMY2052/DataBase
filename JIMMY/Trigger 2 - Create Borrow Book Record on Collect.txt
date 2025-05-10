@@ -6,7 +6,7 @@ DECLARE
   v_BorrowID VARCHAR2(10);
 BEGIN
   -- 1. Get the next value from the sequence and format it
-  v_BorrowID := 'RC' || LPAD(SEQ_BorrowBookID.NEXTVAL, 4, '0');
+  v_BorrowID := 'RC' || LPAD(SEQ_BorrowBookID.NEXTVAL, 5, '0');
 
   -- 2. Insert new BorrowBook record
   INSERT INTO BorrowBook (
