@@ -1,0 +1,5 @@
+CREATE INDEX idx_fine_payment_status 
+ON Fine(PaymentDate, FineStatus);
+
+CREATE INDEX idx_fine_campaignid 
+ON Fine(CampaignID);

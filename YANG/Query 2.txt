@@ -1,0 +1,31 @@
+COLUMN Name HEADING 'Member Name' FORMAT A12
+COLUMN TotalOverdueBooks HEADING 'Total Overdue Books' FORMAT 9999
+COLUMN BookTitles HEADING 'Book Titles' FORMAT A40
+COLUMN TotalFineAmount HEADING 'Total Fine Amount' FORMAT 9999
+
+CREATE OR REPLACE VIEW LateReturnSummary AS
+SELECT 
+    m.Name,
+    LISTAGG(b.Title, CHR(10)) WITHIN GROUP (ORDER BY b.Title) AS BookTitles,
+    COUNT(bb.BorrowBookID) AS TotalOverdueBooks,
+    SUM(
+        CASE 
+            WHEN (TRUNC(SYSDATE) - bb.DueDate) <= 7 THEN 5
+            ELSE 5 + ((TRUNC(SYSDATE) - bb.DueDate) - 7)
+        END
+    ) AS TotalFineAmount
+FROM 
+    Fine f
+JOIN BorrowBook bb ON f.BorrowBookID = bb.BorrowBookID
+JOIN Member m ON bb.MemberID = m.MemberID
+JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+JOIN Book b ON bc.ISBN = b.ISBN
+LEFT JOIN ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
+WHERE 
+    bb.DueDate < TRUNC(SYSDATE)
+    AND rb.BorrowBookID IS NULL
+    AND f.FineStatus = 'Unpaid'
+GROUP BY 
+    m.Name
+ORDER BY 
+    MIN(f.FineID);

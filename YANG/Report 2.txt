@@ -1,0 +1,61 @@
+CREATE OR REPLACE PROCEDURE GenerateFineCollectionReport (
+    p_start_date IN DATE,
+    p_end_date   IN DATE
+)
+IS
+    -- Outer cursor: Members who have paid fines in the period
+    CURSOR cur_members IS
+        SELECT DISTINCT m.MemberID, m.Name
+        FROM Member m
+        JOIN BorrowBook bb ON m.MemberID = bb.MemberID
+        JOIN Fine f ON bb.BorrowBookID = f.BorrowBookID
+        WHERE f.FineStatus = 'Paid'
+          AND TRUNC(f.PaymentDate) BETWEEN TRUNC(p_start_date) AND TRUNC(p_end_date)
+        ORDER BY m.Name;
+
+    -- Nested cursor: Fine details per member
+    CURSOR cur_fines(p_member_id Member.MemberID%TYPE) IS
+        SELECT f.FineID, f.BorrowBookID, f.Amount, f.PaymentDate, f.FineStatus
+        FROM Fine f
+        JOIN BorrowBook bb ON f.BorrowBookID = bb.BorrowBookID
+        WHERE bb.MemberID = p_member_id
+          AND f.FineStatus = 'Paid'
+          AND TRUNC(f.PaymentDate) BETWEEN TRUNC(p_start_date) AND TRUNC(p_end_date)
+        ORDER BY f.PaymentDate;
+
+    v_total_per_member NUMBER(10,2);
+    v_grand_total      NUMBER(10,2) := 0;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(CHR(5));
+    DBMS_OUTPUT.PUT_LINE('=============================== Fine Collection Report ===============================');
+    DBMS_OUTPUT.PUT_LINE('Period: ' || TO_CHAR(p_start_date, 'YYYY-MM-DD') || ' to ' || TO_CHAR(p_end_date, 'YYYY-MM-DD'));
+    DBMS_OUTPUT.PUT_LINE('--------------------------------------------------------------------------------------');
+
+    FOR m IN cur_members LOOP
+        v_total_per_member := 0;
+
+        DBMS_OUTPUT.PUT_LINE(CHR(5));
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 86, '-'));
+        DBMS_OUTPUT.PUT_LINE('Member: ' || m.Name || ' (' || m.MemberID || ')');
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 86, '-'));
+        DBMS_OUTPUT.PUT_LINE('| ' || RPAD('FineID', 15) || '| ' || RPAD('BorrowBookID', 15) || '| ' || RPAD('Amount', 15) || '| ' || RPAD('Paid Date', 15) || '| ' || RPAD('Status', 15) || '|');
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 86, '-'));
+
+        FOR f IN cur_fines(m.MemberID) LOOP
+            DBMS_OUTPUT.PUT_LINE('| ' || RPAD(f.FineID, 15) || '| ' || RPAD(f.BorrowBookID, 15) || '| ' || RPAD(TO_CHAR(f.Amount, '9990.00'), 15) || '| ' || RPAD(TO_CHAR(f.PaymentDate, 'YYYY-MM-DD'), 15) || '| ' || RPAD(f.FineStatus, 15) || '|');
+
+            v_total_per_member := v_total_per_member + f.Amount;
+        END LOOP;
+
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 86, '-'));
+        DBMS_OUTPUT.PUT_LINE('  >> Total Fine Collected from ' || m.Name || ': RM' || TO_CHAR(v_total_per_member, '9990.00'));
+        DBMS_OUTPUT.PUT_LINE(RPAD('-', 86, '-'));
+        v_grand_total := v_grand_total + v_total_per_member;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(5));
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 86, '='));
+    DBMS_OUTPUT.PUT_LINE('GRAND TOTAL COLLECTED: RM' || TO_CHAR(v_grand_total, '9990.00'));
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 86, '='));
+END;
+/

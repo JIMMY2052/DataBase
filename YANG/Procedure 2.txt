@@ -1,0 +1,71 @@
+CREATE OR REPLACE PROCEDURE BorrowBookProcedure (
+    p_MemberID     IN VARCHAR2,
+    p_BookCopyID   IN VARCHAR2
+)
+IS
+    v_Status       VARCHAR2(15);
+    v_IsAvailable  VARCHAR2(1);
+    v_AlreadyBorrowed EXCEPTION;
+    v_BorrowID     VARCHAR2(10);
+BEGIN
+    -- Check if member is active
+    SELECT Status INTO v_Status
+    FROM Member
+    WHERE MemberID = p_MemberID;
+
+    IF v_Status != 'Active' THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Member is not eligible to borrow (suspended or inactive).');
+    END IF;
+
+    -- Check if book copy is available
+    SELECT IsAvailable INTO v_IsAvailable
+    FROM BookCopy
+    WHERE BookCopyID = p_BookCopyID;
+
+    IF v_IsAvailable != 'Y' THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Book copy is not available.');
+    END IF;
+
+    -- Prevent duplicate borrow of same copy without return
+    FOR rec IN (
+        SELECT * FROM BorrowBook bb
+        LEFT JOIN ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
+        WHERE bb.MemberID = p_MemberID
+          AND bb.BookCopyID = p_BookCopyID
+          AND rb.BorrowBookID IS NULL
+    )
+    LOOP
+        RAISE v_AlreadyBorrowed;
+    END LOOP;
+
+    -- Generate BorrowBookID (e.g., BB0010)
+    SELECT 'BB' || LPAD(TO_CHAR(NVL(MAX(TO_NUMBER(SUBSTR(BorrowBookID, 3))), 0) + 1), 5, '0')
+    INTO v_BorrowID
+    FROM BorrowBook;
+
+    -- Insert new borrow record
+    INSERT INTO BorrowBook (
+        BorrowBookID, MemberID, BookCopyID, BorrowDate, DueDate
+    ) VALUES (
+        v_BorrowID, p_MemberID, p_BookCopyID, SYSDATE, SYSDATE + 7
+    );
+
+    -- Mark book as unavailable
+    UPDATE BookCopy
+    SET IsAvailable = 'N'
+    WHERE BookCopyID = p_BookCopyID;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('Book borrowed successfully. Borrow ID: ' || v_BorrowID);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Invalid Member ID or Book Copy ID.');
+    WHEN v_AlreadyBorrowed THEN
+        RAISE_APPLICATION_ERROR(-20004, 'This member has already borrowed this book and not returned it.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        ROLLBACK;
+END;
+/

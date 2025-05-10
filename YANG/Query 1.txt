@@ -1,18 +1,20 @@
-CREATE OR REPLACE VIEW check_overdue_unpaid_fines AS
+COLUMN Name HEADING 'Member Name' FORMAT A12
+COLUMN BookCopyID HEADING 'Book Copy ID' FORMAT A15
+COLUMN BookTitles HEADING 'Book Titles' FORMAT A40
+
+CREATE OR REPLACE VIEW UpcomingDueBooks AS
 SELECT 
-    f.FineID AS Fine_ID,
-    m.Name AS Member_Name,
-    b.Title AS Book_Title,
-    bb.DueDate AS Due_Date,
-    (TRUNC(SYSDATE) - TRUNC(bb.DueDate)) AS Days_Late,
-    CASE
-        WHEN (TRUNC(SYSDATE) - TRUNC(bb.DueDate)) <= 7 THEN 5
-        ELSE 5 + ((TRUNC(SYSDATE) - TRUNC(bb.DueDate)) - 7)
-    END AS Fine_Amount
-FROM Fine f
-JOIN BorrowBook bb ON f.BorrowBookID = bb.BorrowBookID 
+    m.Name,
+    bb.BookCopyID,
+    b.Title AS BookTitle
+FROM 
+    BorrowBook bb
 JOIN Member m ON bb.MemberID = m.MemberID
 JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
 JOIN Book b ON bc.ISBN = b.ISBN
-WHERE f.FineStatus = 'Unpaid'
-ORDER BY Fine_Amount ASC;
+LEFT JOIN ReturnBook rb ON bb.BorrowBookID = rb.BorrowBookID
+WHERE 
+    bb.DueDate = TRUNC(SYSDATE) + 3
+    AND rb.BorrowBookID IS NULL
+ORDER BY 
+    bb.DueDate ASC;

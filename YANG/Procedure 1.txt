@@ -1,0 +1,96 @@
+CREATE OR REPLACE PROCEDURE ReturnBookProcess (
+    p_BorrowBookID IN VARCHAR2,
+    p_ReturnStatus IN VARCHAR2,
+    p_Condition    IN VARCHAR2
+)
+IS
+    v_DueDate     DATE;
+    v_BookCopyID  VARCHAR2(10);
+    v_Amount      NUMBER(8,2) := 0;
+    v_ISBN        VARCHAR2(15);
+    v_Price       NUMBER(8,2);
+    v_LateFine    NUMBER(8,2) := 0;
+BEGIN
+    -- Validate book condition
+    IF p_Condition NOT IN ('New', 'Good', 'Damaged') THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Invalid book condition. Must be New, Good, or Damaged.');
+    END IF;
+
+    -- Get DueDate and BookCopyID
+    SELECT DueDate, BookCopyID
+    INTO v_DueDate, v_BookCopyID
+    FROM BorrowBook
+    WHERE BorrowBookID = p_BorrowBookID;
+
+    -- Get ISBN and Price
+    SELECT b.ISBN, bk.Price INTO v_ISBN, v_Price
+    FROM BookCopy b
+    JOIN Book bk ON b.ISBN = bk.ISBN
+    WHERE b.BookCopyID = v_BookCopyID;
+
+    
+    -- Insert return record
+    INSERT INTO ReturnBook (ReturnBookID, BorrowBookID, ReturnStatus, ReturnDate)
+    VALUES (
+        'RB' || LPAD(TO_CHAR(ReturnBook_seq.NEXTVAL), 5, '0'),
+        p_BorrowBookID,
+        p_ReturnStatus,
+        SYSDATE
+    );
+    
+    -- Update BookCopy condition
+    UPDATE BookCopy
+    SET Condition = p_Condition
+    WHERE BookCopyID = v_BookCopyID;
+
+    -- Update availability if not Lost and not Damaged (handled by trigger)
+    IF p_ReturnStatus != 'Lost' AND p_Condition != 'Damaged' THEN
+        UPDATE BookCopy
+        SET IsAvailable = 'Y'
+        WHERE BookCopyID = v_BookCopyID;
+    END IF;
+
+    -- Fine calculation logic
+    IF p_ReturnStatus = 'Late' THEN
+        -- Calculate late fine
+        IF SYSDATE <= v_DueDate + 7 THEN
+            v_LateFine := 5;
+        ELSE
+            v_LateFine := 5 + (SYSDATE - (v_DueDate + 7));
+        END IF;
+
+        -- If Damaged, add book price
+        IF p_Condition = 'Damaged' THEN
+            v_Amount := v_LateFine + v_Price;
+        ELSE
+            v_Amount := v_LateFine;
+        END IF;
+
+    ELSIF p_ReturnStatus = 'On Time' THEN
+        IF p_Condition = 'Damaged' THEN
+            v_Amount := v_Price;
+        END IF;
+
+    ELSIF p_ReturnStatus = 'Lost' THEN
+        v_Amount := v_Price;
+    END IF;
+
+    -- Only update fine if there's an amount to charge
+    IF v_Amount > 0 THEN
+        UPDATE Fine
+        SET Amount = v_Amount,
+            PaymentDate = SYSDATE,
+            FineStatus = 'Paid'
+        WHERE BorrowBookID = p_BorrowBookID;
+    END IF;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('BorrowBookID not found.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        ROLLBACK;
+END;
+/

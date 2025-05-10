@@ -1,0 +1,9 @@
+CREATE OR REPLACE TRIGGER trg_UpdateAvailabilityOnDamage
+BEFORE UPDATE OF Condition ON BookCopy
+FOR EACH ROW
+BEGIN
+    IF :NEW.Condition = 'Damaged' THEN
+        :NEW.IsAvailable := 'N';
+    END IF;
+END;
+/

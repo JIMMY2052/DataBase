@@ -1,0 +1,104 @@
+CREATE OR REPLACE PROCEDURE GenerateDailyLibrarySummary (
+    p_ReportDate IN DATE DEFAULT NULL
+)
+IS
+    v_ReportDate       DATE := NVL(p_ReportDate, TRUNC(SYSDATE));
+    v_total_borrowed   INTEGER := 0;
+    v_total_returned   INTEGER := 0;
+    v_total_fines_paid NUMBER(10,2) := 0;
+
+    -- Flags to check if rows were fetched
+    v_has_borrows BOOLEAN := FALSE;
+    v_has_returns BOOLEAN := FALSE;
+
+    -- Cursor for borrowed books
+    CURSOR cur_borrows IS
+        SELECT m.MemberID,
+	       m.Name AS MemberName,
+               bc.BookCopyID,
+               b.Title,
+               bb.BorrowDate
+        FROM BorrowBook bb
+        JOIN Member m ON bb.MemberID = m.MemberID
+        JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+        JOIN Book b ON bc.ISBN = b.ISBN
+        WHERE TRUNC(bb.BorrowDate) = v_ReportDate
+        ORDER BY bb.BorrowDate;
+
+    -- Cursor for returned books
+    CURSOR cur_returns IS
+        SELECT m.MemberID,
+	       m.Name AS MemberName,
+               bc.BookCopyID,
+               b.Title,
+               rb.ReturnStatus,
+               rb.ReturnDate
+        FROM ReturnBook rb
+        JOIN BorrowBook bb ON rb.BorrowBookID = bb.BorrowBookID
+        JOIN Member m ON bb.MemberID = m.MemberID
+        JOIN BookCopy bc ON bb.BookCopyID = bc.BookCopyID
+        JOIN Book b ON bc.ISBN = b.ISBN
+        WHERE TRUNC(rb.ReturnDate) = v_ReportDate
+        ORDER BY rb.ReturnDate;
+BEGIN
+    -- Total borrows
+    SELECT COUNT(*)
+    INTO v_total_borrowed
+    FROM BorrowBook
+    WHERE TRUNC(BorrowDate) = v_ReportDate;
+
+    -- Total returns
+    SELECT COUNT(*)
+    INTO v_total_returned
+    FROM ReturnBook
+    WHERE TRUNC(ReturnDate) = v_ReportDate;
+
+    -- Total fines paid
+    SELECT NVL(SUM(Amount), 0)
+    INTO v_total_fines_paid
+    FROM Fine
+    WHERE TRUNC(PaymentDate) = v_ReportDate
+      AND FineStatus = 'Paid';
+
+    -- Report header
+    DBMS_OUTPUT.PUT_LINE(CHR(5));
+    DBMS_OUTPUT.PUT_LINE('============================================= Library Daily Summary Report =============================================');
+    DBMS_OUTPUT.PUT_LINE('Date: ' || TO_CHAR(v_ReportDate, 'YYYY-MM-DD'));
+
+    -- Borrowed book details
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 120, '='));
+    DBMS_OUTPUT.PUT_LINE('Books Borrowed');
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 120, '-'));
+    DBMS_OUTPUT.PUT_LINE('| ' || RPAD('Member ID', 25) || '| ' || RPAD('Member Name', 25) || '| ' || RPAD('Book Title', 35) || '| ' || RPAD('Book Copy', 25) || ' |');
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 120, '-'));
+
+    FOR b IN cur_borrows LOOP
+        DBMS_OUTPUT.PUT_LINE('| ' || RPAD(b.MemberID, 25) || '| ' || RPAD(b.MemberName, 25) || '| ' || RPAD(b.Title, 35) || '| ' || RPAD(b.BookCopyID, 25) || ' |');
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 120, '='));
+    DBMS_OUTPUT.PUT_LINE(CHR(5));
+
+    -- Returned book details
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 120, '='));
+    DBMS_OUTPUT.PUT_LINE('Books Returned');
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 120, '-'));
+    DBMS_OUTPUT.PUT_LINE('| ' || RPAD('Member ID', 19) || '| ' || RPAD('Member Name', 19) || '| ' || RPAD('Book Title', 35) || '| ' || RPAD('Book Copy', 19) || '| ' || RPAD('Return Status', 17) || '|');
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 120, '-'));
+
+    FOR r IN cur_returns LOOP
+        DBMS_OUTPUT.PUT_LINE('| ' || RPAD(r.MemberID, 19) || '| ' || RPAD(r.MemberName, 19) || '| ' || RPAD(r.Title, 35) || '| ' || RPAD(r.BookCopyID, 19) || '| ' || RPAD(r.ReturnStatus, 17) || '|');
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('=', 120, '='));
+    DBMS_OUTPUT.PUT_LINE(CHR(5));
+
+    -- Report summary
+    DBMS_OUTPUT.PUT_LINE('Total Books Borrowed: ' || v_total_borrowed);
+    DBMS_OUTPUT.PUT_LINE('Total Books Returned: ' || v_total_returned);
+    DBMS_OUTPUT.PUT_LINE('Total Fines Paid (RM): ' || TO_CHAR(v_total_fines_paid, '9990.00'));
+    DBMS_OUTPUT.PUT_LINE('------------------------------------------------------------------------------------------------------------------------');
+
+
+END;
+/

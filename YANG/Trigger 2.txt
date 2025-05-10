@@ -1,0 +1,17 @@
+CREATE OR REPLACE TRIGGER trg_UnblockMemberOnFinePaid
+AFTER UPDATE OF FineStatus ON Fine
+DECLARE
+BEGIN
+    -- Update members with all fines paid (and who are still suspended)
+    UPDATE Member m
+    SET m.Status = 'Active'
+    WHERE m.Status = 'Suspended'
+      AND EXISTS (
+          SELECT *
+          FROM Fine f
+          JOIN BorrowBook bb ON f.BorrowBookID = bb.BorrowBookID
+          WHERE bb.MemberID = m.MemberID
+            AND f.FineStatus = 'Unpaid'
+      );
+END;
+/
