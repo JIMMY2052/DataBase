@@ -1,0 +1,104 @@
+-- Format columns for display
+Set linesize 220;
+set pagesize 50;
+-- Member Table
+COLUMN MemberID             FORMAT A10
+COLUMN Name                 FORMAT A20
+COLUMN Email                FORMAT A30
+COLUMN PhoneNumber          FORMAT A15
+COLUMN MembershipStartDate  FORMAT A12
+COLUMN MembershipExpiryDate FORMAT A12
+COLUMN Status               FORMAT A10
+COLUMN NoShowCount          FORMAT 999
+COLUMN ReservationBanUntil FORMAT A12
+
+-- Book Table
+COLUMN ISBN                 FORMAT A15
+COLUMN Title                FORMAT A30
+COLUMN Author               FORMAT A20
+COLUMN PublicationYear      FORMAT 9999
+COLUMN Price                FORMAT 9990.99
+COLUMN Description          FORMAT A50
+COLUMN Language             FORMAT A12
+
+-- Genre Table
+COLUMN GenreID              FORMAT A10
+COLUMN Description          FORMAT A50
+COLUMN GenreName            FORMAT A20
+
+-- BookGenre Table
+COLUMN ISBN                 FORMAT A15
+COLUMN GenreID              FORMAT A10
+
+-- BookCopy Table
+COLUMN BookCopyID           FORMAT A10
+COLUMN ISBN                 FORMAT A15
+COLUMN ShelfLocation        FORMAT A20
+COLUMN IsAvailable          FORMAT A3
+COLUMN Condition            FORMAT A10
+COLUMN AcquiredDate         FORMAT A12
+
+-- Reservation Table
+COLUMN MemberID             FORMAT A10
+COLUMN ISBN                 FORMAT A15
+COLUMN ReservationDate      FORMAT A12
+COLUMN Status               FORMAT A15
+
+
+
+1. Today Reservation (Query 1)
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00001', TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978196740169139', 'BC00001', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00005', NULL, '978187478216498', 'BC00002', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Collected');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00010', NULL, '978647894640884', 'BC00003', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Expired');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00025', TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978756814510443', 'BC00004', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978118598993540', 'BC00005', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00010', NULL, '978802533807786', 'BC0020', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Expired');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00022', TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978527703449123', 'BC00007', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00010', TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978100849738142', 'BC00014', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00045',TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978196740169139', 'BC00082', TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Ready for Pickup');
+
+2. Due Borrow today & tomorrow (Query 2)
+INSERT INTO BorrowBook (BorrowBookID, MemberID, BookCopyID, BorrowDate, DueDate) VALUES ('BB00301', 'M00041','BC00087', TO_DATE('2025-04-25', 'YYYY-MM-DD'), TO_DATE('2025-05-10', 'YYYY-MM-DD'));
+INSERT INTO BorrowBook (BorrowBookID, MemberID, BookCopyID, BorrowDate, DueDate) VALUES ('BB00302', 'M00041','BC00087', TO_DATE('2025-04-30', 'YYYY-MM-DD'), TO_DATE('2025-05-11', 'YYYY-MM-DD'));
+INSERT INTO BorrowBook (BorrowBookID, MemberID, BookCopyID, BorrowDate, DueDate) VALUES ('BB00303', 'M00043','BC00098', TO_DATE('2025-04-22', 'YYYY-MM-DD'), TO_DATE('2025-05-10', 'YYYY-MM-DD'));
+
+
+3.Update Reservartion status (Procedure 1)
+select * from bookcopy where isbn = 978209939785296;
+select * from reservation where isbn = 978209939785296;
+
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00001', NULL, '978209939785296', NULL, TO_DATE('2025-05-10', 'YYYY-MM-DD'), 'Pending');
+
+4.Expired Uncollected Reservations (Procedure 2)
+update reservation
+set readyforpickupdate = '6-may-25'
+where isbn = 978209939785296 and memberid = 'M00001';
+
+exec uncollected_reservations;
+
+select * from reservation where isbn = 978209939785296;
+select * from bookcopy where isbn = 978209939785296;
+
+
+5. banned member noshow (trigger 1)
+select * from member where memberid = 'M00039';
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00039', TO_DATE('2025-05-6', 'YYYY-MM-DD'), '978209939785296', NULL, TO_DATE('2025-05-1', 'YYYY-MM-DD'), 'Ready for Pickup');
+select * from reservation where isbn = 978209939785296;
+
+6. create book record (trigger 2)
+INSERT INTO Reservation (MemberID, ReadyForPickupDate, ISBN, BookCopyID, ReservationDate, Status) VALUES ('M00032', TO_DATE('2025-05-10', 'YYYY-MM-DD'), '978209939785296', 'BC00087', TO_DATE('2025-05-1', 'YYYY-MM-DD'), 'Ready for Pickup');
+
+update reservation
+set status = 'Collected'
+where isbn = 978209939785296;
+
+
+
+
+
+
+
+
+
+
+
